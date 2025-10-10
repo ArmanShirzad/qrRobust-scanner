@@ -1,0 +1,11 @@
+[phases.setup]
+nixPkgs = ['zbar']
+
+[phases.install]
+cmds = ['pip install -r requirements.txt']
+
+[phases.build]
+cmds = ['echo "Build phase complete"']
+
+[start]
+cmd = 'python app.py'

@@ -2,7 +2,6 @@ from flask import Flask, render_template, request, jsonify, flash, redirect, url
 import os
 from werkzeug.utils import secure_filename
 from PIL import Image
-import cv2
 import numpy as np
 import io
 import base64
@@ -59,52 +58,47 @@ def decode_with_zxing(image_path):
         print(f"zxing-cpp error: {e}")
         return None
 
+def decode_with_pyzbar(image_path):
+    """Decode QR code using pyzbar library."""
+    try:
+        from pyzbar import pyzbar
+        
+        # Read image
+        image = Image.open(image_path)
+        
+        # Convert to grayscale if needed
+        if image.mode != 'L':
+            image = image.convert('L')
+        
+        # Try to decode
+        qr_codes = pyzbar.decode(image)
+        
+        if qr_codes:
+            decoded_data = []
+            for qr_code in qr_codes:
+                decoded_data.append(qr_code.data.decode('utf-8'))
+            return decoded_data
+        
+        return None
+        
+    except ImportError:
+        return None
+    except Exception as e:
+        print(f"pyzbar error: {e}")
+        return None
+
 def decode_qr_code(image_path):
     """Decode QR code from image file using multiple detection methods."""
     try:
-        # First try zxing-cpp (better for QR codes with logos)
+        # First try zxing-cpp (best for QR codes with logos)
         zxing_result = decode_with_zxing(image_path)
         if zxing_result:
             return zxing_result, None
         
-        # Fallback to OpenCV methods
-        # Read the image
-        image = cv2.imread(image_path)
-        
-        if image is None:
-            return None, "Could not read the image file"
-        
-        # Try multiple approaches for better detection
-        qr_detector = cv2.QRCodeDetector()
-        
-        # First attempt: direct detection
-        data, bbox, _ = qr_detector.detectAndDecode(image)
-        
-        if data:
-            return [data], None
-        
-        # Second attempt: convert to grayscale and try again
-        gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-        data, bbox, _ = qr_detector.detectAndDecode(gray)
-        
-        if data:
-            return [data], None
-        
-        # Third attempt: apply some preprocessing
-        # Resize image if it's too small
-        height, width = gray.shape
-        if height < 200 or width < 200:
-            scale_factor = max(200/height, 200/width)
-            new_width = int(width * scale_factor)
-            new_height = int(height * scale_factor)
-            gray = cv2.resize(gray, (new_width, new_height), interpolation=cv2.INTER_CUBIC)
-        
-        # Apply threshold to improve contrast
-        _, thresh = cv2.threshold(gray, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
-        data, bbox, _ = qr_detector.detectAndDecode(thresh)
-        
-        if data:
-            return [data], None
+        # Fallback to pyzbar
+        pyzbar_result = decode_with_pyzbar(image_path)
+        if pyzbar_result:
+            return pyzbar_result, None
         
         return None, "No QR code found in the image. Try using a clearer image with better contrast."
         
@@ -152,41 +146,28 @@ def decode_qr_from_base64(base64_string):
         except Exception as e:
             print(f"zxing-cpp error: {e}")
         
-        # Fallback to OpenCV methods
-        # Convert to OpenCV format
-        opencv_image = cv2.cvtColor(np.array(image), cv2.COLOR_RGB2BGR)
-        
-        # Try multiple approaches for better detection
-        qr_detector = cv2.QRCodeDetector()
-        
-        # First attempt: direct detection
-        data, bbox, _ = qr_detector.detectAndDecode(opencv_image)
-        
-        if data:
-            return [data], None
-        
-        # Second attempt: convert to grayscale and try again
-        gray = cv2.cvtColor(opencv_image, cv2.COLOR_BGR2GRAY)
-        data, bbox, _ = qr_detector.detectAndDecode(gray)
-        
-        if data:
-            return [data], None
-        
-        # Third attempt: apply some preprocessing
-        # Resize image if it's too small
-        height, width = gray.shape
-        if height < 200 or width < 200:
-            scale_factor = max(200/height, 200/width)
-            new_width = int(width * scale_factor)
-            new_height = int(height * scale_factor)
-            gray = cv2.resize(gray, (new_width, new_height), interpolation=cv2.INTER_CUBIC)
-        
-        # Apply threshold to improve contrast
-        _, thresh = cv2.threshold(gray, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
-        data, bbox, _ = qr_detector.detectAndDecode(thresh)
-        
-        if data:
-            return [data], None
+        # Fallback to pyzbar
+        try:
+            from pyzbar import pyzbar
+            
+            # Convert to grayscale if needed
+            if image.mode != 'L':
+                image_gray = image.convert('L')
+            else:
+                image_gray = image
+            
+            # Try to decode
+            qr_codes = pyzbar.decode(image_gray)
+            
+            if qr_codes:
+                decoded_data = []
+                for qr_code in qr_codes:
+                    decoded_data.append(qr_code.data.decode('utf-8'))
+                return decoded_data, None
+        except ImportError:
+            pass
+        except Exception as e:
+            print(f"pyzbar error: {e}")
         
         return None, "No QR code found in the image. Try using a clearer image with better contrast."
         
