@@ -104,6 +104,51 @@ The application includes comprehensive error handling for:
 - Network errors (API)
 - File size limits (16MB max)
 
-## License
+## Deployment
 
-This project is open source and available under the MIT License.
+### Railway (Recommended - Free)
+
+Railway offers a generous free tier perfect for this QR code reader app.
+
+#### Quick Deploy to Railway:
+
+1. **Push your code to GitHub:**
+   ```bash
+   git add .
+   git commit -m "Add Railway deployment support"
+   git push origin main
+   ```
+
+2. **Deploy to Railway:**
+   - Go to [railway.app](https://railway.app)
+   - Sign up/login with GitHub
+   - Click "New Project" → "Deploy from GitHub repo"
+   - Select your repository
+   - Railway will auto-detect Python and deploy!
+
+3. **Your app will be live at:** `https://your-app-name.railway.app`
+
+#### Railway Features:
+- 🆓 **Free $5/month credit** (enough for small apps)
+- 🔒 **Automatic HTTPS**
+- 🔧 **Environment variables support**
+- 🚀 **Auto-deploy on git push**
+- 📊 **Built-in monitoring**
+
+#### Optional Environment Variables:
+Set these in your Railway dashboard for production:
+- `FLASK_ENV=production` (for production mode)
+- `SECRET_KEY=your-secret-key` (for Flask sessions)
+
+### Other Deployment Options
+
+#### Heroku
+```bash
+# Run the deployment script
+bash deploy.sh
+```
+
+#### Local Development
+```bash
+python app.py
+```

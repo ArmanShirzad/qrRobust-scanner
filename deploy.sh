@@ -1,35 +1,48 @@
 #!/bin/bash
-# Quick deployment script for your QR code reader
+# Railway deployment script for QR code reader
 
-echo "🚀 Deploying QR Code Reader App..."
+echo "🚀 Preparing QR Code Reader for Railway deployment..."
 
-# Install dependencies
+# Install dependencies locally for testing
+echo "📦 Installing dependencies..."
 pip install -r requirements.txt
 
-# Create production configuration
-cat > production_config.py << EOF
-import os
+# Test the installation
+echo "🧪 Testing installation..."
+python test_installation.py
 
-class ProductionConfig:
-    SECRET_KEY = os.environ.get('SECRET_KEY') or 'your-production-secret-key'
-    DEBUG = False
-    HOST = '0.0.0.0'
-    PORT = int(os.environ.get('PORT', 5000))
-EOF
+if [ $? -eq 0 ]; then
+    echo "✅ Local installation test passed!"
+else
+    echo "❌ Installation test failed. Please check dependencies."
+    exit 1
+fi
 
-# Create Procfile for Heroku
-echo "web: python app.py" > Procfile
-
-# Create runtime.txt
-echo "python-3.12" > runtime.txt
-
-echo "✅ Ready for deployment!"
 echo ""
-echo "Next steps:"
-echo "1. Create Heroku account: https://heroku.com"
-echo "2. Install Heroku CLI"
-echo "3. Run: heroku create your-qr-reader-app"
-echo "4. Run: git add . && git commit -m 'Deploy QR reader'"
-echo "5. Run: git push heroku main"
+echo "🎉 Ready for Railway deployment!"
 echo ""
-echo "Your app will be live at: https://your-qr-reader-app.herokuapp.com"
+echo "📋 Railway Deployment Steps:"
+echo "1. Push your code to GitHub:"
+echo "   git add ."
+echo "   git commit -m 'Add Railway deployment support'"
+echo "   git push origin main"
+echo ""
+echo "2. Deploy to Railway:"
+echo "   - Go to https://railway.app"
+echo "   - Sign up/login with GitHub"
+echo "   - Click 'New Project' → 'Deploy from GitHub repo'"
+echo "   - Select your repository"
+echo "   - Railway will auto-detect Python and deploy!"
+echo ""
+echo "3. Your app will be live at: https://your-app-name.railway.app"
+echo ""
+echo "💡 Railway Features:"
+echo "   - Free $5/month credit (enough for small apps)"
+echo "   - Automatic HTTPS"
+echo "   - Environment variables support"
+echo "   - Auto-deploy on git push"
+echo "   - Built-in monitoring"
+echo ""
+echo "🔧 Optional: Set environment variables in Railway dashboard:"
+echo "   - FLASK_ENV=production (for production mode)"
+echo "   - SECRET_KEY=your-secret-key (for Flask sessions)"
