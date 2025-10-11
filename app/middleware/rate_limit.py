@@ -23,6 +23,11 @@ class RateLimitMiddleware(BaseHTTPMiddleware):
             "/health",
             "/favicon.ico"
         ]
+        self.public_paths = [
+            "/api/v1/qr-designer/styles",
+            "/api/v1/qr-designer/templates",
+            "/api/v1/qr-designer/preview"
+        ]
     
     async def dispatch(self, request: Request, call_next):
         # Skip rate limiting for excluded paths
@@ -42,13 +47,16 @@ class RateLimitMiddleware(BaseHTTPMiddleware):
             response.headers["X-RateLimit-Reason"] = "redis-unavailable"
             return response
         
+        # For public paths, use IP-based rate limiting with free tier limits
+        is_public_path = any(request.url.path.startswith(path) for path in self.public_paths)
+        
         # Get identifier for rate limiting
-        identifier = await self._get_identifier(request)
+        identifier = await self._get_identifier(request, is_public_path)
         if not identifier:
             return await call_next(request)
         
-        # Get user tier for rate limiting
-        tier = await self._get_user_tier(request)
+        # Get user tier for rate limiting (free tier for public paths)
+        tier = "free" if is_public_path else await self._get_user_tier(request)
         
         # Check rate limits
         rate_result = rate_limiter.is_allowed(identifier, tier, request.url.path)
@@ -88,8 +96,13 @@ class RateLimitMiddleware(BaseHTTPMiddleware):
         
         return response
     
-    async def _get_identifier(self, request: Request) -> Optional[str]:
+    async def _get_identifier(self, request: Request, is_public_path: bool = False) -> Optional[str]:
         """Get unique identifier for rate limiting."""
+        # For public paths, always use IP address
+        if is_public_path:
+            client_ip = request.client.host if request.client else "unknown"
+            return f"ip:{client_ip}"
+        
         # Try to get user ID from JWT token first
         try:
             auth_header = request.headers.get("authorization")

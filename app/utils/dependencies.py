@@ -58,10 +58,13 @@ def get_current_verified_user(current_user: User = Depends(get_current_active_us
 
 
 def get_optional_current_user(
-    credentials: HTTPAuthorizationCredentials = Depends(security),
+    credentials: HTTPAuthorizationCredentials = Depends(HTTPBearer(auto_error=False)),
     db: Session = Depends(get_db)
 ) -> User | None:
     """Get the current user if authenticated, otherwise return None."""
+    if not credentials:
+        return None
+        
     try:
         token = credentials.credentials
         user_id = get_user_id_from_token(token)
