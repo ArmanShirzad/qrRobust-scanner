@@ -176,3 +176,77 @@ def decode_qr_from_base64(base64_string: str) -> Tuple[Optional[List[str]], Opti
         
     except Exception as e:
         return None, f"Error processing image: {str(e)}"
+
+
+def batch_decode_qr_codes(image_paths: List[str]) -> List[Tuple[Optional[List[str]], Optional[str]]]:
+    """Decode multiple QR codes from a list of image paths."""
+    results = []
+    for image_path in image_paths:
+        result = decode_qr_code(image_path)
+        results.append(result)
+    return results
+
+
+def batch_decode_qr_from_base64(base64_images: List[str]) -> List[Tuple[Optional[List[str]], Optional[str]]]:
+    """Decode multiple QR codes from a list of base64 encoded images."""
+    results = []
+    for base64_image in base64_images:
+        result = decode_qr_from_base64(base64_image)
+        results.append(result)
+    return results
+
+
+def get_qr_code_info(data: str) -> dict:
+    """Extract information about QR code data."""
+    info = {
+        "data": data,
+        "length": len(data),
+        "type": "unknown",
+        "is_url": False,
+        "is_email": False,
+        "is_phone": False,
+        "is_wifi": False,
+        "is_geo": False,
+        "is_sms": False,
+        "is_vcard": False
+    }
+    
+    # Check for URL
+    if data.startswith(('http://', 'https://', 'www.')):
+        info["type"] = "url"
+        info["is_url"] = True
+    
+    # Check for email
+    elif '@' in data and '.' in data.split('@')[1]:
+        info["type"] = "email"
+        info["is_email"] = True
+    
+    # Check for phone number
+    elif data.startswith('tel:'):
+        info["type"] = "phone"
+        info["is_phone"] = True
+    
+    # Check for WiFi
+    elif data.startswith('WIFI:'):
+        info["type"] = "wifi"
+        info["is_wifi"] = True
+    
+    # Check for SMS
+    elif data.startswith('sms:'):
+        info["type"] = "sms"
+        info["is_sms"] = True
+    
+    # Check for vCard
+    elif data.startswith('BEGIN:VCARD'):
+        info["type"] = "vcard"
+        info["is_vcard"] = True
+    
+    # Check for geographic coordinates
+    elif 'geo:' in data.lower() or 'latitude' in data.lower():
+        info["type"] = "geo"
+        info["is_geo"] = True
+    
+    else:
+        info["type"] = "text"
+    
+    return info

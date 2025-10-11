@@ -425,3 +425,156 @@ async def get_qr_codes_overview(
         scans_today=scans_today,
         top_performing=top_performing_data
     )
+
+
+@router.post("/bulk-generate", response_model=List[QRCodeResponse])
+async def bulk_generate_qr_codes(
+    qr_data_list: List[QRCodeGenerate],
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
+    """Generate multiple QR codes in bulk."""
+    
+    if len(qr_data_list) > 100:  # Limit bulk size
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Too many QR codes. Maximum bulk size is 100 QR codes."
+        )
+    
+    created_qr_codes = []
+    
+    try:
+        for qr_data in qr_data_list:
+            # Generate QR code
+            qr_result = QRCodeGenerator.generate_qr_base64(
+                data=qr_data.data,
+                size=qr_data.size,
+                border=qr_data.border,
+                error_correction=qr_data.error_correction_level,
+                foreground_color=qr_data.foreground_color,
+                background_color=qr_data.background_color,
+                logo_path=qr_data.logo_url
+            )
+            
+            if not qr_result["success"]:
+                continue  # Skip failed QR codes
+            
+            # Create QR code record
+            qr_code = QRCode(
+                user_id=current_user.id,
+                name=qr_data.name,
+                data=qr_data.data,
+                qr_type=qr_data.qr_type,
+                size=qr_data.size,
+                border=qr_data.border,
+                error_correction_level=qr_data.error_correction_level,
+                foreground_color=qr_data.foreground_color,
+                background_color=qr_data.background_color,
+                logo_url=qr_data.logo_url,
+                short_url=qr_result["short_url"],
+                scan_count=0,
+                is_active=True
+            )
+            
+            db.add(qr_code)
+            db.commit()
+            db.refresh(qr_code)
+            
+            created_qr_codes.append(qr_code)
+        
+        return created_qr_codes
+        
+    except Exception as e:
+        db.rollback()
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Bulk generation error: {str(e)}"
+        )
+
+
+@router.post("/bulk-update/{qr_code_id}", response_model=QRCodeResponse)
+async def bulk_update_qr_codes(
+    qr_code_ids: List[int],
+    qr_data: QRCodeUpdate,
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
+    """Update multiple QR codes in bulk."""
+    
+    if len(qr_code_ids) > 50:  # Limit bulk size
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Too many QR codes. Maximum bulk update size is 50 QR codes."
+        )
+    
+    updated_qr_codes = []
+    
+    try:
+        for qr_code_id in qr_code_ids:
+            qr_code = db.query(QRCode).filter(
+                QRCode.id == qr_code_id,
+                QRCode.user_id == current_user.id
+            ).first()
+            
+            if not qr_code:
+                continue  # Skip non-existent QR codes
+            
+            # Update QR code
+            update_data = qr_data.dict(exclude_unset=True)
+            for field, value in update_data.items():
+                setattr(qr_code, field, value)
+            
+            db.commit()
+            db.refresh(qr_code)
+            updated_qr_codes.append(qr_code)
+        
+        return updated_qr_codes[0] if updated_qr_codes else None
+        
+    except Exception as e:
+        db.rollback()
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Bulk update error: {str(e)}"
+        )
+
+
+@router.delete("/bulk-delete")
+async def bulk_delete_qr_codes(
+    qr_code_ids: List[int],
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
+    """Delete multiple QR codes in bulk."""
+    
+    if len(qr_code_ids) > 50:  # Limit bulk size
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Too many QR codes. Maximum bulk delete size is 50 QR codes."
+        )
+    
+    deleted_count = 0
+    
+    try:
+        for qr_code_id in qr_code_ids:
+            qr_code = db.query(QRCode).filter(
+                QRCode.id == qr_code_id,
+                QRCode.user_id == current_user.id
+            ).first()
+            
+            if qr_code:
+                db.delete(qr_code)
+                deleted_count += 1
+        
+        db.commit()
+        
+        return {
+            "message": f"Successfully deleted {deleted_count} QR codes",
+            "deleted_count": deleted_count
+        }
+        
+    except Exception as e:
+        db.rollback()
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Bulk delete error: {str(e)}"
+        )

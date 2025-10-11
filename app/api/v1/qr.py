@@ -151,6 +151,180 @@ async def decode_qr_base64_endpoint(
         raise HTTPException(status_code=500, detail=f"Server error: {str(e)}")
 
 
+@router.post("/batch-decode")
+async def batch_decode_qr_endpoint(
+    files: List[UploadFile] = File(...),
+    request: Request = None,
+    db: Session = Depends(get_db),
+    current_user: Optional[User] = Depends(get_optional_current_user)
+):
+    """Decode multiple QR codes from uploaded image files in batch."""
+    
+    if len(files) > 50:  # Limit batch size
+        raise HTTPException(
+            status_code=400,
+            detail="Too many files. Maximum batch size is 50 files."
+        )
+    
+    results = []
+    temp_files = []
+    
+    try:
+        for file in files:
+            if not allowed_file(file.filename):
+                results.append({
+                    "filename": file.filename,
+                    "success": False,
+                    "error": "Invalid file type"
+                })
+                continue
+            
+            # Check file size
+            if file.size and file.size > settings.max_file_size:
+                results.append({
+                    "filename": file.filename,
+                    "success": False,
+                    "error": f"File too large. Maximum size is {settings.max_file_size} bytes."
+                })
+                continue
+            
+            # Save uploaded file temporarily
+            filename = secure_filename(file.filename)
+            with tempfile.NamedTemporaryFile(delete=False, suffix=f"_{filename}") as tmp_file:
+                content = await file.read()
+                tmp_file.write(content)
+                tmp_file_path = tmp_file.name
+                temp_files.append(tmp_file_path)
+            
+            # Decode QR code
+            decoded_data, error = decode_qr_code(tmp_file_path)
+            
+            if error:
+                results.append({
+                    "filename": filename,
+                    "success": False,
+                    "error": error
+                })
+            else:
+                # Save scan to database for analytics
+                client_info = get_client_info(request)
+                scan_record = QRScan(
+                    user_id=current_user.id if current_user else None,
+                    content=decoded_data[0] if decoded_data else None,
+                    filename=filename,
+                    file_size=len(content),
+                    ip_address=client_info["ip_address"],
+                    user_agent=client_info["user_agent"],
+                    referer=client_info["referer"],
+                    scan_timestamp=datetime.utcnow()
+                )
+                db.add(scan_record)
+                db.commit()
+                db.refresh(scan_record)
+                
+                results.append({
+                    "filename": filename,
+                    "success": True,
+                    "decoded_data": decoded_data,
+                    "scan_id": scan_record.id
+                })
+        
+        return {
+            "success": True,
+            "total_files": len(files),
+            "processed_files": len(results),
+            "results": results
+        }
+        
+    finally:
+        # Clean up temporary files
+        for tmp_file_path in temp_files:
+            if os.path.exists(tmp_file_path):
+                os.unlink(tmp_file_path)
+
+
+@router.post("/batch-decode-base64")
+async def batch_decode_qr_base64_endpoint(
+    request_data: dict,
+    request: Request = None,
+    db: Session = Depends(get_db),
+    current_user: Optional[User] = Depends(get_optional_current_user)
+):
+    """Decode multiple QR codes from base64 encoded images in batch."""
+    
+    images = request_data.get("images", [])
+    if not images:
+        raise HTTPException(status_code=400, detail="No images provided")
+    
+    if len(images) > 50:  # Limit batch size
+        raise HTTPException(
+            status_code=400,
+            detail="Too many images. Maximum batch size is 50 images."
+        )
+    
+    results = []
+    
+    try:
+        for i, base64_image in enumerate(images):
+            if not base64_image:
+                results.append({
+                    "index": i,
+                    "success": False,
+                    "error": "No image data provided"
+                })
+                continue
+            
+            try:
+                decoded_data, error = decode_qr_from_base64(base64_image)
+                
+                if error:
+                    results.append({
+                        "index": i,
+                        "success": False,
+                        "error": error
+                    })
+                else:
+                    # Save scan to database for analytics
+                    client_info = get_client_info(request)
+                    scan_record = QRScan(
+                        user_id=current_user.id if current_user else None,
+                        content=decoded_data[0] if decoded_data else None,
+                        filename=f"base64_image_{i}",
+                        file_size=len(base64_image),
+                        ip_address=client_info["ip_address"],
+                        user_agent=client_info["user_agent"],
+                        referer=client_info["referer"],
+                        scan_timestamp=datetime.utcnow()
+                    )
+                    db.add(scan_record)
+                    db.commit()
+                    db.refresh(scan_record)
+                    
+                    results.append({
+                        "index": i,
+                        "success": True,
+                        "decoded_data": decoded_data,
+                        "scan_id": scan_record.id
+                    })
+                    
+            except Exception as e:
+                results.append({
+                    "index": i,
+                    "success": False,
+                    "error": f"Processing error: {str(e)}"
+                })
+        
+        return {
+            "success": True,
+            "total_images": len(images),
+            "processed_images": len(results),
+            "results": results
+        }
+        
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Batch processing error: {str(e)}")
+
+
 @router.get("/health")
 async def qr_health_check():
     """Health check for QR processing service."""
