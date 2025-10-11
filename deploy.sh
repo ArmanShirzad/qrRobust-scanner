@@ -21,7 +21,7 @@ fi
 echo ""
 echo "🎉 Ready for Railway deployment!"
 echo ""
-echo "📋 Railway Deployment Steps:"
+echo "📋 Railway Deployment Steps (PRODUCTION):"
 echo "1. Push your code to GitHub:"
 echo "   git add ."
 echo "   git commit -m 'Add Railway deployment support'"
