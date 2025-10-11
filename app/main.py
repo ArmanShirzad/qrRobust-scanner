@@ -8,6 +8,7 @@ import os
 
 from app.core.config import settings
 from app.api.v1 import api_router
+from app.middleware.rate_limit import RateLimitMiddleware
 
 # Create FastAPI app
 app = FastAPI(
@@ -26,6 +27,9 @@ app.add_middleware(
     allow_methods=settings.cors_allow_methods,
     allow_headers=settings.cors_allow_headers,
 )
+
+# Add rate limiting middleware
+app.add_middleware(RateLimitMiddleware)
 
 # Create upload directory
 os.makedirs(settings.upload_folder, exist_ok=True)
