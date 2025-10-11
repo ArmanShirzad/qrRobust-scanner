@@ -2,7 +2,7 @@
 
 A simple and elegant QR code reader application that can decode QR codes from uploaded images. Available as both a web application and a command-line tool.
 
-## Features
+## 🚀 Features
 
 - 🖼️ **Image Upload**: Support for PNG, JPG, JPEG, GIF, BMP, and TIFF formats
 - 🔍 **QR Code Detection**: Automatically detects and decodes QR codes in images using OpenCV
@@ -12,7 +12,7 @@ A simple and elegant QR code reader application that can decode QR codes from up
 - 📋 **Copy to Clipboard**: Easy copying of decoded content
 - 🚀 **API Endpoint**: RESTful API for programmatic access
 
-## Installation
+## 📦 Installation
 
 1. Clone or download this repository
 2. Create a virtual environment (recommended):
@@ -26,7 +26,7 @@ source .venv/bin/activate  # On Windows: .venv\Scripts\activate
 pip install -r requirements.txt
 ```
 
-## Usage
+## 🎯 Usage
 
 ### Web Application
 
@@ -72,7 +72,7 @@ Response:
 }
 ```
 
-## Supported Image Formats
+## 🖼️ Supported Image Formats
 
 - PNG
 - JPG/JPEG
@@ -80,14 +80,14 @@ Response:
 - BMP
 - TIFF
 
-## Dependencies
+## 🔧 Dependencies
 
 - Flask: Web framework
 - Pillow: Image processing
 - OpenCV (contrib): Computer vision with QR code detection
 - NumPy: Numerical computing
 
-## Testing Installation
+## 🧪 Testing Installation
 
 Run the test script to verify everything is working:
 
@@ -95,7 +95,7 @@ Run the test script to verify everything is working:
 python test_installation.py
 ```
 
-## Error Handling
+## ⚠️ Error Handling
 
 The application includes comprehensive error handling for:
 - Invalid file formats
@@ -104,7 +104,7 @@ The application includes comprehensive error handling for:
 - Network errors (API)
 - File size limits (16MB max)
 
-## Deployment
+## 🚀 Deployment
 
 ### Railway (Recommended - Free)
 
@@ -113,11 +113,11 @@ Railway offers a generous free tier perfect for this QR code reader app.
 #### Quick Deploy to Railway:
 
 1. **Push your code to GitHub:**
-   ```bash
-   git add .
-   git commit -m "Add Railway deployment support"
-   git push origin main
-   ```
+```bash
+git add .
+git commit -m "Add Railway deployment support"
+git push origin main
+```
 
 2. **Deploy to Railway:**
    - Go to [railway.app](https://railway.app)
@@ -152,3 +152,32 @@ bash deploy.sh
 ```bash
 python app.py
 ```
+
+## 🤝 Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
+
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
+
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## 🙏 Acknowledgments
+
+- [OpenCV](https://opencv.org/) for QR code detection
+- [Flask](https://flask.palletsprojects.com/) for the web framework
+- [Railway](https://railway.app/) for hosting
+
+## 📊 Repository Stats
+
+![GitHub stars](https://img.shields.io/github/stars/yourusername/qr-reader?style=social)
+![GitHub forks](https://img.shields.io/github/forks/yourusername/qr-reader?style=social)
+![GitHub issues](https://img.shields.io/github/issues/yourusername/qr-reader)
+![GitHub license](https://img.shields.io/github/license/yourusername/qr-reader)
+![Python](https://img.shields.io/badge/python-3.7+-blue.svg)
+![Flask](https://img.shields.io/badge/flask-2.0+-green.svg)
