@@ -1,5 +1,11 @@
 # QR Code Reader - Portfolio Version
 
+[![Python](https://img.shields.io/badge/python-3.8+-blue.svg)](https://python.org)
+[![Flask](https://img.shields.io/badge/flask-2.0+-green.svg)](https://flask.palletsprojects.com/)
+[![OpenCV](https://img.shields.io/badge/opencv-4.0+-red.svg)](https://opencv.org/)
+[![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+[![Railway](https://img.shields.io/badge/deployed%20on-Railway-0B0D0E.svg)](https://railway.app/)
+
 A Flask-based web application for reading QR codes from images and PDFs.
 
 ## Features

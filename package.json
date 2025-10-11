@@ -1,0 +1,53 @@
+{
+  "name": "QR Code Reader App",
+  "description": "A simple and elegant QR code reader application that can decode QR codes from uploaded images. Available as both a web application and a command-line tool.",
+  "version": "1.0.0",
+  "author": "Arman Shirzad",
+  "license": "MIT",
+  "homepage": "https://github.com/ArmanShirzad/qrRobust-scanner",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ArmanShirzad/qrRobust-scanner.git"
+  },
+  "bugs": {
+    "url": "https://github.com/ArmanShirzad/qrRobust-scanner/issues"
+  },
+  "keywords": [
+    "qr-code",
+    "qr-reader",
+    "python",
+    "flask",
+    "opencv",
+    "computer-vision",
+    "image-processing",
+    "web-application",
+    "cli-tool",
+    "api",
+    "railway",
+    "deployment",
+    "qr-scanner",
+    "barcode-reader"
+  ],
+  "topics": [
+    "qr-code",
+    "qr-reader",
+    "python",
+    "flask",
+    "opencv",
+    "computer-vision",
+    "image-processing",
+    "web-application",
+    "cli-tool",
+    "api",
+    "railway",
+    "deployment"
+  ],
+  "engines": {
+    "python": ">=3.8"
+  },
+  "scripts": {
+    "start": "python app.py",
+    "test": "python test_installation.py",
+    "deploy": "bash deploy.sh"
+  }
+}
