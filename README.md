@@ -1,109 +1,71 @@
-# QR Code Reader App
+# QR Code Reader - Portfolio Version
 
-A simple and elegant QR code reader application that can decode QR codes from uploaded images. Available as both a web application and a command-line tool.
+A Flask-based web application for reading QR codes from images and PDFs.
 
 ## Features
+- Upload and decode QR codes from images (PNG, JPG, JPEG, GIF, BMP, TIFF)
+- Batch processing of multiple QR codes
+- PDF QR code extraction
+- WiFi QR code generation
+- RESTful API endpoints
+- Clean, responsive web interface
 
-- 🖼️ **Image Upload**: Support for PNG, JPG, JPEG, GIF, BMP, and TIFF formats
-- 🔍 **QR Code Detection**: Automatically detects and decodes QR codes in images using OpenCV
-- 🌐 **Web Interface**: Beautiful, responsive web interface with drag-and-drop support
-- 💻 **Command Line**: Simple CLI tool for quick QR code decoding
-- 🔗 **Smart Detection**: Automatically detects URLs, emails, phone numbers, and WiFi configurations
-- 📋 **Copy to Clipboard**: Easy copying of decoded content
-- 🚀 **API Endpoint**: RESTful API for programmatic access
+## Live Demo
+Visit the deployed version at: [Your Railway App URL]
 
-## Installation
+## Quick Start
 
-1. Clone or download this repository
-2. Create a virtual environment (recommended):
-```bash
-python3 -m venv .venv
-source .venv/bin/activate  # On Windows: .venv\Scripts\activate
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/yourusername/qr-reader.git
+   cd qr-reader
+   ```
+
+2. **Install dependencies**
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+3. **Set up environment variables**
+   ```bash
+   cp env.example .env
+   # Edit .env with your configuration
+   ```
+
+4. **Run the application**
+   ```bash
+   python app.py
+   ```
+
+5. **Open your browser**
+   Navigate to `http://localhost:5000`
+
+## API Endpoints
+
+- `POST /api/decode` - Decode QR code from uploaded image
+- `POST /api/batch` - Process multiple QR codes
+- `GET /api/docs` - API documentation
+
+## Technologies Used
+- **Backend**: Flask, Python
+- **QR Processing**: zxing-cpp, qrcode
+- **Image Processing**: PIL (Pillow)
+- **PDF Processing**: PyPDF2
+- **Frontend**: HTML, CSS, JavaScript
+- **Deployment**: Railway
+
+## Project Structure
+```
+├── app.py              # Main Flask application
+├── templates/          # HTML templates
+├── static/            # CSS and JavaScript files
+├── uploads/           # Uploaded files directory
+├── requirements.txt   # Python dependencies
+└── railway.json      # Railway deployment config
 ```
 
-3. Install the required dependencies:
-```bash
-pip install -r requirements.txt
-```
-
-## Usage
-
-### Web Application
-
-1. Start the web server:
-```bash
-python app.py
-```
-
-2. Open your browser and go to `http://localhost:5000`
-
-3. Upload an image containing a QR code by:
-   - Clicking the upload area and selecting a file
-   - Dragging and dropping an image onto the upload area
-
-4. View the decoded content on the results page
-
-### Command Line Interface
-
-```bash
-python cli_qr_reader.py <image_path>
-```
-
-Examples:
-```bash
-python cli_qr_reader.py qr_code.png
-python cli_qr_reader.py /path/to/image.jpg
-```
-
-### API Usage
-
-Send a POST request to `/decode_base64` with a base64-encoded image:
-
-```bash
-curl -X POST http://localhost:5000/decode_base64 \
-  -H "Content-Type: application/json" \
-  -d '{"image": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAA..."}'
-```
-
-Response:
-```json
-{
-  "decoded_data": ["https://example.com", "Hello World"]
-}
-```
-
-## Supported Image Formats
-
-- PNG
-- JPG/JPEG
-- GIF
-- BMP
-- TIFF
-
-## Dependencies
-
-- Flask: Web framework
-- Pillow: Image processing
-- OpenCV (contrib): Computer vision with QR code detection
-- NumPy: Numerical computing
-
-## Testing Installation
-
-Run the test script to verify everything is working:
-
-```bash
-python test_installation.py
-```
-
-## Error Handling
-
-The application includes comprehensive error handling for:
-- Invalid file formats
-- Corrupted images
-- Missing QR codes
-- Network errors (API)
-- File size limits (16MB max)
+## Contributing
+This is a portfolio project. For development features, see the `feature/update` branch.
 
 ## License
-
-This project is open source and available under the MIT License.
+MIT License - feel free to use this code for your own projects!

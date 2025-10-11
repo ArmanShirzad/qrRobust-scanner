@@ -8,7 +8,7 @@ import io
 import base64
 
 app = Flask(__name__)
-app.secret_key = 'your-secret-key-here'
+app.secret_key = os.environ.get('SECRET_KEY', 'dev-key-change-in-production')
 
 # Configuration
 UPLOAD_FOLDER = 'uploads'
