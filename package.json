@@ -39,7 +39,7 @@
     "deployment"
   ],
   "engines": {
-    "python": ">=3.7"
+    "python": ">=3.8"
   },
   "scripts": {
     "start": "python app.py",

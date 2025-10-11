@@ -179,5 +179,5 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ![GitHub forks](https://img.shields.io/github/forks/yourusername/qr-reader?style=social)
 ![GitHub issues](https://img.shields.io/github/issues/yourusername/qr-reader)
 ![GitHub license](https://img.shields.io/github/license/yourusername/qr-reader)
-![Python](https://img.shields.io/badge/python-3.7+-blue.svg)
+![Python](https://img.shields.io/badge/python-3.8+-blue.svg)
 ![Flask](https://img.shields.io/badge/flask-2.0+-green.svg)
