@@ -1,6 +1,6 @@
-# QR Code Reader App
+# QR Code Reader - Portfolio Version
 
-A simple and elegant QR code reader application that can decode QR codes from uploaded images. Available as both a web application and a command-line tool.
+A Flask-based web application for reading QR codes from images and PDFs.
 
 ## 🚀 Features
 
