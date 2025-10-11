@@ -1,0 +1,702 @@
+{
+  "info": {
+    "name": "QR Code Reader Premium Platform API",
+    "description": "Complete API collection for QR Code Reader Premium Platform",
+    "version": "1.0.0",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{access_token}}",
+        "type": "string"
+      }
+    ]
+  },
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "https://api.qrreader-premium.com/api/v1",
+      "type": "string"
+    },
+    {
+      "key": "access_token",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "refresh_token",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "user_email",
+      "value": "test@example.com",
+      "type": "string"
+    },
+    {
+      "key": "user_password",
+      "value": "password123",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "Authentication",
+      "item": [
+        {
+          "name": "Register User",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"{{user_email}}\",\n  \"password\": \"{{user_password}}\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/auth/register",
+              "host": ["{{base_url}}"],
+              "path": ["auth", "register"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Login",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "    const response = pm.response.json();",
+                  "    pm.collectionVariables.set('access_token', response.access_token);",
+                  "    pm.collectionVariables.set('refresh_token', response.refresh_token);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"{{user_email}}\",\n  \"password\": \"{{user_password}}\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/auth/login",
+              "host": ["{{base_url}}"],
+              "path": ["auth", "login"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Current User",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/auth/me",
+              "host": ["{{base_url}}"],
+              "path": ["auth", "me"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Refresh Token",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"refresh_token\": \"{{refresh_token}}\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/auth/refresh",
+              "host": ["{{base_url}}"],
+              "path": ["auth", "refresh"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "QR Code Processing",
+      "item": [
+        {
+          "name": "Decode QR Code from File",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "file",
+                  "type": "file",
+                  "src": []
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{base_url}}/qr/decode",
+              "host": ["{{base_url}}"],
+              "path": ["qr", "decode"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Decode QR Code from Base64",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"image\": \"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAA...\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/qr/decode-base64",
+              "host": ["{{base_url}}"],
+              "path": ["qr", "decode-base64"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Batch Decode QR Codes",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "files",
+                  "type": "file",
+                  "src": []
+                },
+                {
+                  "key": "files",
+                  "type": "file",
+                  "src": []
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{base_url}}/qr/batch-decode",
+              "host": ["{{base_url}}"],
+              "path": ["qr", "batch-decode"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "QR Health Check",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/qr/health",
+              "host": ["{{base_url}}"],
+              "path": ["qr", "health"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "QR Code Management",
+      "item": [
+        {
+          "name": "Generate QR Code",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"My QR Code\",\n  \"data\": \"https://example.com\",\n  \"qr_type\": \"url\",\n  \"size\": 300,\n  \"border\": 4,\n  \"error_correction_level\": \"M\",\n  \"foreground_color\": \"#000000\",\n  \"background_color\": \"#FFFFFF\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/qr-codes/generate",
+              "host": ["{{base_url}}"],
+              "path": ["qr-codes", "generate"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get QR Code Info",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/qr-codes/info?data=https://example.com",
+              "host": ["{{base_url}}"],
+              "path": ["qr-codes", "info"],
+              "query": [
+                {
+                  "key": "data",
+                  "value": "https://example.com"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "List QR Codes",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/qr-codes?page=1&limit=20",
+              "host": ["{{base_url}}"],
+              "path": ["qr-codes"],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "limit",
+                  "value": "20"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get QR Code by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/qr-codes/1",
+              "host": ["{{base_url}}"],
+              "path": ["qr-codes", "1"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update QR Code",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Updated QR Code\",\n  \"is_active\": true\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/qr-codes/1",
+              "host": ["{{base_url}}"],
+              "path": ["qr-codes", "1"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete QR Code",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/qr-codes/1",
+              "host": ["{{base_url}}"],
+              "path": ["qr-codes", "1"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Bulk Generate QR Codes",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "[\n  {\n    \"name\": \"QR Code 1\",\n    \"data\": \"https://example1.com\",\n    \"qr_type\": \"url\"\n  },\n  {\n    \"name\": \"QR Code 2\",\n    \"data\": \"https://example2.com\",\n    \"qr_type\": \"url\"\n  }\n]"
+            },
+            "url": {
+              "raw": "{{base_url}}/qr-codes/bulk-generate",
+              "host": ["{{base_url}}"],
+              "path": ["qr-codes", "bulk-generate"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "QR Code Designer",
+      "item": [
+        {
+          "name": "Design QR Code",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "data",
+                  "value": "https://example.com",
+                  "type": "text"
+                },
+                {
+                  "key": "size",
+                  "value": "300",
+                  "type": "text"
+                },
+                {
+                  "key": "fill_color",
+                  "value": "#2563eb",
+                  "type": "text"
+                },
+                {
+                  "key": "back_color",
+                  "value": "#FFFFFF",
+                  "type": "text"
+                },
+                {
+                  "key": "module_drawer",
+                  "value": "rounded",
+                  "type": "text"
+                },
+                {
+                  "key": "color_mask",
+                  "value": "radial_gradient",
+                  "type": "text"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{base_url}}/qr-designer/design",
+              "host": ["{{base_url}}"],
+              "path": ["qr-designer", "design"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Design Templates",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/qr-designer/templates",
+              "host": ["{{base_url}}"],
+              "path": ["qr-designer", "templates"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Preview QR Design",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "data",
+                  "value": "https://example.com",
+                  "type": "text"
+                },
+                {
+                  "key": "template",
+                  "value": "gradient_blue",
+                  "type": "text"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{base_url}}/qr-designer/preview",
+              "host": ["{{base_url}}"],
+              "path": ["qr-designer", "preview"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Analytics",
+      "item": [
+        {
+          "name": "Get Dashboard Stats",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/analytics/dashboard?days=30",
+              "host": ["{{base_url}}"],
+              "path": ["analytics", "dashboard"],
+              "query": [
+                {
+                  "key": "days",
+                  "value": "30"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Scan History",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/analytics/scans?page=1&limit=50",
+              "host": ["{{base_url}}"],
+              "path": ["analytics", "scans"],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "limit",
+                  "value": "50"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Detailed Stats",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/analytics/detailed?days=30&qr_code_id=1",
+              "host": ["{{base_url}}"],
+              "path": ["analytics", "detailed"],
+              "query": [
+                {
+                  "key": "days",
+                  "value": "30"
+                },
+                {
+                  "key": "qr_code_id",
+                  "value": "1"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Export Analytics",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/analytics/export?format=csv&start_date=2024-01-01&end_date=2024-01-31",
+              "host": ["{{base_url}}"],
+              "path": ["analytics", "export"],
+              "query": [
+                {
+                  "key": "format",
+                  "value": "csv"
+                },
+                {
+                  "key": "start_date",
+                  "value": "2024-01-01"
+                },
+                {
+                  "key": "end_date",
+                  "value": "2024-01-31"
+                }
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Subscriptions",
+      "item": [
+        {
+          "name": "Get Subscription Plans",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/subscriptions/plans",
+              "host": ["{{base_url}}"],
+              "path": ["subscriptions", "plans"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Plan Details",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/subscriptions/plan/pro",
+              "host": ["{{base_url}}"],
+              "path": ["subscriptions", "plan", "pro"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Create Subscription",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"plan_id\": \"pro\",\n  \"billing_cycle\": \"monthly\",\n  \"payment_method_id\": \"pm_1234567890\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/subscriptions/subscribe",
+              "host": ["{{base_url}}"],
+              "path": ["subscriptions", "subscribe"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Current Subscription",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/subscriptions/current",
+              "host": ["{{base_url}}"],
+              "path": ["subscriptions", "current"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Cancel Subscription",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/subscriptions/cancel",
+              "host": ["{{base_url}}"],
+              "path": ["subscriptions", "cancel"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Billing Info",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/subscriptions/billing",
+              "host": ["{{base_url}}"],
+              "path": ["subscriptions", "billing"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Rate Limits",
+      "item": [
+        {
+          "name": "Get Rate Limit Status",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/rate-limits/status",
+              "host": ["{{base_url}}"],
+              "path": ["rate-limits", "status"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Rate Limit Usage",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/rate-limits/usage",
+              "host": ["{{base_url}}"],
+              "path": ["rate-limits", "usage"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Rate Limits",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/rate-limits/limits",
+              "host": ["{{base_url}}"],
+              "path": ["rate-limits", "limits"]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ]
+}
