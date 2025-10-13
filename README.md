@@ -91,7 +91,7 @@ FIREBASE_CLIENT_ID=your-client-id
 ## 🚀 Deployment
 
 ### Railway (Recommended)
-[![Deploy on Railway](https://railway.app/button.svg)](https://railway.app/template/your-template-id)
+[![Deploy on Railway](https://railway.app/button.svg)](https://railway.app/new/template?template=https://github.com/ArmanShirzad/qrRobust-scanner/tree/qr-designer-v2)
 
 1. **Push your code to GitHub**
 2. **Go to [railway.app](https://railway.app)**
