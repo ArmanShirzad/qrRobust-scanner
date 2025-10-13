@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, { createContext, useContext, useState } from 'react';
 import { qrAPI, qrDesignerAPI } from '../services/api';
 import toast from 'react-hot-toast';
 
@@ -129,25 +129,27 @@ export const QRProvider = ({ children }) => {
     }
   };
 
-  const designAndSaveQRCode = async (designData) => {
+  const designAndSaveQRCode = async (formData) => {
     try {
-      const formData = new FormData();
-      Object.keys(designData).forEach(key => {
-        if (designData[key] !== null && designData[key] !== undefined) {
-          if (key === 'custom_styling' && typeof designData[key] === 'object') {
-            formData.append(key, JSON.stringify(designData[key]));
-          } else {
-            formData.append(key, designData[key]);
-          }
-        }
-      });
-
       const response = await qrDesignerAPI.designAndSave(formData);
       toast.success('QR code designed and saved successfully');
       await fetchQRCodes(); // Refresh the list
       return response.data;
     } catch (error) {
-      const message = error.response?.data?.detail || 'Failed to design and save QR code';
+      let message = 'Failed to design and save QR code';
+      
+      if (error.response?.data?.detail) {
+        const detail = error.response.data.detail;
+        if (Array.isArray(detail)) {
+          // Handle Pydantic validation errors
+          message = detail.map(err => `${err.loc?.join('.')}: ${err.msg}`).join(', ');
+        } else if (typeof detail === 'string') {
+          message = detail;
+        }
+      } else if (error.message) {
+        message = error.message;
+      }
+      
       toast.error(message);
       throw error;
     }

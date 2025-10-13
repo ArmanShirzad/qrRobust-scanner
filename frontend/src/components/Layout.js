@@ -9,7 +9,8 @@ import {
   LogOut,
   Menu,
   X,
-  User
+  User,
+  Camera
 } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 
@@ -21,6 +22,7 @@ const Layout = () => {
 
   const navigation = [
     { name: 'Dashboard', href: '/dashboard', icon: LayoutDashboard },
+    { name: 'QR Scanner', href: '/qr-scanner', icon: Camera },
     { name: 'QR Designer', href: '/qr-designer', icon: Palette },
     { name: 'Analytics', href: '/analytics', icon: BarChart3 },
     { name: 'QR Management', href: '/qr-management', icon: QrCode },
@@ -112,8 +114,8 @@ const Layout = () => {
               <div className="flex-shrink-0">
                 <User className="h-8 w-8 text-gray-400" />
               </div>
-              <div className="ml-3 flex-1">
-                <p className="text-sm font-medium text-gray-900">{user?.email}</p>
+              <div className="ml-3 flex-1 min-w-0">
+                <p className="text-sm font-medium text-gray-900 truncate" title={user?.email}>{user?.email}</p>
                 <p className="text-xs text-gray-500 capitalize">{user?.tier} Plan</p>
               </div>
               <button

@@ -7,8 +7,9 @@ from datetime import timedelta
 from app.database import get_db
 from app.models import User
 from app.schemas.auth import (
-    UserCreate, UserLogin, UserResponse, Token, 
-    PasswordReset, PasswordResetConfirm, EmailVerification, ChangePassword
+    UserCreate, UserLogin, UserResponse, Token,
+    PasswordReset, PasswordResetConfirm, EmailVerification, ChangePassword,
+    RefreshRequest
 )
 from app.utils.auth import (
     verify_password, get_password_hash, create_access_token, 
@@ -82,10 +83,10 @@ async def login(user_credentials: UserLogin, db: Session = Depends(get_db)):
 
 
 @router.post("/refresh", response_model=Token)
-async def refresh_token(refresh_token: str, db: Session = Depends(get_db)):
+async def refresh_token(body: RefreshRequest, db: Session = Depends(get_db)):
     """Refresh access token using refresh token."""
     try:
-        payload = verify_token(refresh_token, "refresh")
+        payload = verify_token(body.refresh_token, "refresh")
         user_id = payload.get("sub")
         
         if user_id is None:

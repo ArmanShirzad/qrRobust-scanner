@@ -1,22 +1,24 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useDropzone } from 'react-dropzone';
 import { 
   Palette, 
   Upload, 
   Download, 
-  Save, 
   Eye,
   Settings,
   Image,
-  Type,
   Square,
   Circle,
   Zap
 } from 'lucide-react';
 import { qrDesignerAPI } from '../services/api';
+import { useQR } from '../contexts/QRContext';
 import toast from 'react-hot-toast';
 
 const QRDesigner = () => {
+  const navigate = useNavigate();
+  const { designAndSaveQRCode } = useQR();
   const [designData, setDesignData] = useState({
     data: '',
     size: 300,
@@ -35,50 +37,20 @@ const QRDesigner = () => {
   const [logoFile, setLogoFile] = useState(null);
   const [backgroundFile, setBackgroundFile] = useState(null);
   const [previewImage, setPreviewImage] = useState(null);
-  const [templates, setTemplates] = useState({});
-  const [styles, setStyles] = useState({});
   const [loading, setLoading] = useState(false);
   const [activeTab, setActiveTab] = useState('basic');
 
-  useEffect(() => {
-    fetchTemplates();
-    fetchStyles();
-  }, []);
 
-  const fetchTemplates = async () => {
-    try {
-      const response = await qrDesignerAPI.getTemplates();
-      setTemplates(response.data.templates);
-    } catch (error) {
-      console.error('Failed to fetch templates:', error);
-    }
-  };
-
-  const fetchStyles = async () => {
-    try {
-      const response = await qrDesignerAPI.getStyles();
-      setStyles(response.data);
-    } catch (error) {
-      console.error('Failed to fetch styles:', error);
-    }
-  };
 
   const handleInputChange = (field, value) => {
     setDesignData(prev => ({
       ...prev,
       [field]: value
     }));
+    
+    // Removed auto-preview on typing to avoid excessive requests
   };
 
-  const handleTemplateSelect = (templateName) => {
-    const template = templates[templateName];
-    if (template) {
-      setDesignData(prev => ({
-        ...prev,
-        ...template.options
-      }));
-    }
-  };
 
   const generatePreview = async () => {
     if (!designData.data) {
@@ -88,12 +60,39 @@ const QRDesigner = () => {
 
     try {
       setLoading(true);
+      console.log('Generating preview with data:', designData);
+      
       const formData = new FormData();
       formData.append('data', designData.data);
-      formData.append('template', 'minimal'); // Use minimal as base
+      formData.append('size', designData.size);
+      formData.append('border', designData.border);
+      formData.append('error_correction', designData.error_correction);
+      formData.append('fill_color', designData.fill_color);
+      formData.append('back_color', designData.back_color);
+      formData.append('module_drawer', designData.module_drawer);
+      formData.append('color_mask', designData.color_mask);
+      formData.append('corner_radius', designData.corner_radius);
+      formData.append('logo_size', designData.logo_size);
+      formData.append('logo_position', designData.logo_position);
 
-      const response = await qrDesignerAPI.preview(formData);
-      setPreviewImage(response.data.image_data);
+      if (logoFile) {
+        formData.append('logo_file', logoFile);
+      }
+      if (backgroundFile) {
+        formData.append('background_file', backgroundFile);
+      }
+
+      console.log('Sending request to API...');
+      const response = await qrDesignerAPI.design(formData);
+      console.log('API response:', response.data);
+      
+      if (response.data.success && response.data.image_data) {
+        setPreviewImage(response.data.image_data);
+        toast.success('Preview generated successfully!');
+      } else {
+        console.error('API returned unsuccessful response:', response.data);
+        toast.error('Failed to generate preview - API error');
+      }
     } catch (error) {
       console.error('Failed to generate preview:', error);
       toast.error('Failed to generate preview');
@@ -110,17 +109,21 @@ const QRDesigner = () => {
 
     try {
       setLoading(true);
-      const formData = new FormData();
       
-      Object.keys(designData).forEach(key => {
-        if (designData[key] !== null && designData[key] !== undefined) {
-          if (key === 'custom_styling' && typeof designData[key] === 'object') {
-            formData.append(key, JSON.stringify(designData[key]));
-          } else {
-            formData.append(key, designData[key]);
-          }
-        }
-      });
+      // Create FormData with all required fields including name
+      const formData = new FormData();
+      formData.append('data', designData.data);
+      formData.append('name', `QR Code ${new Date().toISOString().slice(0, 19)}`); // Auto-generate name
+      formData.append('size', designData.size);
+      formData.append('border', designData.border);
+      formData.append('error_correction', designData.error_correction);
+      formData.append('fill_color', designData.fill_color);
+      formData.append('back_color', designData.back_color);
+      formData.append('module_drawer', designData.module_drawer);
+      formData.append('color_mask', designData.color_mask);
+      formData.append('corner_radius', designData.corner_radius);
+      formData.append('logo_size', designData.logo_size);
+      formData.append('logo_position', designData.logo_position);
 
       if (logoFile) {
         formData.append('logo_file', logoFile);
@@ -129,9 +132,9 @@ const QRDesigner = () => {
         formData.append('background_file', backgroundFile);
       }
 
-      const response = await qrDesignerAPI.design(formData);
-      setPreviewImage(response.data.image_data);
-      toast.success('QR code designed successfully!');
+      const response = await designAndSaveQRCode(formData);
+      setPreviewImage(response.image_data);
+      toast.success('QR code designed and saved successfully!');
     } catch (error) {
       console.error('Failed to design QR code:', error);
       toast.error('Failed to design QR code');
@@ -200,22 +203,6 @@ const QRDesigner = () => {
             />
           </div>
 
-          {/* Templates */}
-          <div className="card">
-            <h3 className="text-lg font-semibold text-gray-900 mb-4">Templates</h3>
-            <div className="grid grid-cols-2 gap-2">
-              {Object.entries(templates).map(([key, template]) => (
-                <button
-                  key={key}
-                  onClick={() => handleTemplateSelect(key)}
-                  className="p-3 text-left border border-gray-200 rounded-lg hover:border-blue-500 hover:bg-blue-50 transition-colors"
-                >
-                  <div className="text-sm font-medium text-gray-900">{template.name}</div>
-                  <div className="text-xs text-gray-500">{template.description}</div>
-                </button>
-              ))}
-            </div>
-          </div>
 
           {/* Design Options */}
           <div className="card">
@@ -438,7 +425,7 @@ const QRDesigner = () => {
           <div className="card">
             <div className="space-y-3">
               <button
-                onClick={designQRCode}
+                onClick={generatePreview}
                 disabled={loading || !designData.data}
                 className="w-full btn-primary flex items-center justify-center"
               >
@@ -447,7 +434,22 @@ const QRDesigner = () => {
                 ) : (
                   <>
                     <Palette className="h-5 w-5 mr-2" />
-                    Design QR Code
+                    Generate Preview
+                  </>
+                )}
+              </button>
+              
+              <button
+                onClick={designQRCode}
+                disabled={loading || !designData.data}
+                className="w-full btn-secondary flex items-center justify-center"
+              >
+                {loading ? (
+                  <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-gray-600"></div>
+                ) : (
+                  <>
+                    <Settings className="h-5 w-5 mr-2" />
+                    Design & Save
                   </>
                 )}
               </button>
@@ -461,6 +463,14 @@ const QRDesigner = () => {
                   Download
                 </button>
               )}
+              
+              <button
+                onClick={() => navigate('/qr-management')}
+                className="w-full btn-outline flex items-center justify-center"
+              >
+                <Eye className="h-5 w-5 mr-2" />
+                View in Management
+              </button>
             </div>
           </div>
         </div>

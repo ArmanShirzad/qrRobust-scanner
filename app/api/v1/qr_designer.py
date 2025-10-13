@@ -120,7 +120,7 @@ async def design_qr_code(
         )
 
 
-@router.post("/design-and-save", response_model=QRCodeResponse)
+@router.post("/design-and-save")
 async def design_and_save_qr_code(
     data: str = Form(...),
     name: str = Form(...),
@@ -201,13 +201,14 @@ async def design_and_save_qr_code(
         # Save to database
         qr_code = QRCode(
             user_id=current_user.id,
-            name=name,
-            data=data,
-            qr_type="custom",
+            title=name,
+            destination_url=data,  # Store the QR data as destination_url
+            short_url=f"qr-{uuid.uuid4().hex[:8]}",  # Generate a short URL
             size=validated_options["size"],
-            error_correction=validated_options["error_correction"],
-            design_options=validated_options,
-            image_data=result["image_data"],
+            border=validated_options["border"],
+            error_correction_level=validated_options["error_correction"],
+            foreground_color=validated_options["fill_color"],
+            background_color=validated_options["back_color"],
             created_at=datetime.utcnow()
         )
         
@@ -221,7 +222,13 @@ async def design_and_save_qr_code(
         if background_path and os.path.exists(background_path):
             os.remove(background_path)
         
-        return qr_code
+        # Return QR code with image data - minimal fields only
+        return {
+            "id": qr_code.id,
+            "title": qr_code.title or "QR Code",
+            "destination_url": qr_code.destination_url or "",
+            "image_data": result["image_data"]
+        }
         
     except Exception as e:
         raise HTTPException(

@@ -522,8 +522,8 @@ class QRCodeDesigner:
         if not color.startswith('#'):
             color = '#' + color
         
-        # Remove any invalid characters
-        color = ''.join(c for c in color if c in '0123456789ABCDEFabcdef')
+        # Remove any invalid characters but keep the #
+        color = '#' + ''.join(c for c in color[1:] if c in '0123456789ABCDEFabcdef')
         
         # Ensure proper length
         if len(color) == 4:  # #RGB

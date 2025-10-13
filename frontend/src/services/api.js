@@ -73,7 +73,7 @@ export const qrAPI = {
   }),
   decodeBase64: (data) => api.post('/qr/decode-base64', data),
   generate: (qrData) => api.post('/qr-codes/generate', qrData),
-  getQRCodes: (params) => api.get('/qr-codes', { params }),
+  getQRCodes: (params) => api.get('/qr-codes/my-codes', { params }),
   getQRCode: (id) => api.get(`/qr-codes/${id}`),
   updateQRCode: (id, data) => api.put(`/qr-codes/${id}`, data),
   deleteQRCode: (id) => api.delete(`/qr-codes/${id}`),
@@ -90,9 +90,17 @@ export const qrDesignerAPI = {
   }),
   getStyles: () => api.get('/qr-designer/styles'),
   getTemplates: () => api.get('/qr-designer/templates'),
-  preview: (data) => api.post('/qr-designer/preview', data, {
-    headers: { 'Content-Type': 'multipart/form-data' }
-  }),
+  preview: (data) => {
+    const formData = new FormData();
+    Object.keys(data).forEach(key => {
+      if (data[key] !== null && data[key] !== undefined) {
+        formData.append(key, data[key]);
+      }
+    });
+    return api.post('/qr-designer/preview', formData, {
+      headers: { 'Content-Type': 'multipart/form-data' }
+    });
+  },
 };
 
 // Analytics API

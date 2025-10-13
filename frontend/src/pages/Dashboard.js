@@ -1,7 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { 
-  BarChart, 
-  Bar, 
   XAxis, 
   YAxis, 
   CartesianGrid, 
@@ -18,23 +17,19 @@ import {
   TrendingUp, 
   Users, 
   Eye,
-  Calendar,
-  Download,
-  Upload
+  Plus,
+  Camera
 } from 'lucide-react';
 import { analyticsAPI } from '../services/api';
 import toast from 'react-hot-toast';
 
 const Dashboard = () => {
+  const navigate = useNavigate();
   const [stats, setStats] = useState(null);
   const [loading, setLoading] = useState(true);
   const [timeRange, setTimeRange] = useState(30);
 
-  useEffect(() => {
-    fetchDashboardStats();
-  }, [timeRange]);
-
-  const fetchDashboardStats = async () => {
+  const fetchDashboardStats = useCallback(async () => {
     try {
       setLoading(true);
       const response = await analyticsAPI.getDashboardStats(timeRange);
@@ -45,7 +40,11 @@ const Dashboard = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [timeRange]);
+
+  useEffect(() => {
+    fetchDashboardStats();
+  }, [fetchDashboardStats]);
 
   const formatNumber = (num) => {
     if (num >= 1000000) {
@@ -83,19 +82,28 @@ const Dashboard = () => {
           <p className="text-gray-600">Overview of your QR code activity</p>
         </div>
         <div className="flex space-x-2">
-          {[7, 30, 90, 365].map((days) => (
-            <button
-              key={days}
-              onClick={() => setTimeRange(days)}
-              className={`px-3 py-1 text-sm rounded-lg transition-colors ${
-                timeRange === days
-                  ? 'bg-blue-100 text-blue-700'
-                  : 'text-gray-600 hover:bg-gray-100'
-              }`}
-            >
-              {days} days
-            </button>
-          ))}
+          <button 
+            onClick={() => navigate('/qr-designer')}
+            className="btn-primary flex items-center"
+          >
+            <Plus className="h-5 w-5 mr-2" />
+            Create QR Code
+          </button>
+          <div className="flex space-x-1">
+            {[7, 30, 90, 365].map((days) => (
+              <button
+                key={days}
+                onClick={() => setTimeRange(days)}
+                className={`px-3 py-1 text-sm rounded-lg transition-colors ${
+                  timeRange === days
+                    ? 'bg-blue-100 text-blue-700'
+                    : 'text-gray-600 hover:bg-gray-100'
+                }`}
+              >
+                {days} days
+              </button>
+            ))}
+          </div>
         </div>
       </div>
 
@@ -265,6 +273,24 @@ const Dashboard = () => {
             </tbody>
           </table>
         </div>
+      </div>
+
+      {/* Action Buttons */}
+      <div className="flex flex-col sm:flex-row gap-4">
+        <button
+          onClick={() => navigate('/qr-scanner')}
+          className="btn-primary flex items-center justify-center"
+        >
+          <Camera className="h-5 w-5 mr-2" />
+          Scan QR Code
+        </button>
+        <button
+          onClick={() => navigate('/qr-designer')}
+          className="btn-secondary flex items-center justify-center"
+        >
+          <Plus className="h-5 w-5 mr-2" />
+          Create QR Code
+        </button>
       </div>
     </div>
   );

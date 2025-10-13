@@ -65,3 +65,9 @@ class ChangePassword(BaseModel):
     """Schema for password change."""
     current_password: str
     new_password: str
+
+
+# Request bodies
+class RefreshRequest(BaseModel):
+    """Schema for refresh token request body."""
+    refresh_token: str

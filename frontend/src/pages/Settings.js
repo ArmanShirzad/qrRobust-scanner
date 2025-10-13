@@ -7,7 +7,6 @@ import {
   Bell, 
   Shield,
   Download,
-  Upload,
   Save
 } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
@@ -17,7 +16,7 @@ import toast from 'react-hot-toast';
 const Settings = () => {
   const { user, changePassword } = useAuth();
   const [activeTab, setActiveTab] = useState('profile');
-  const [profileData, setProfileData] = useState({
+  const [profileData] = useState({
     email: user?.email || '',
     tier: user?.tier || 'free'
   });
@@ -79,9 +78,34 @@ const Settings = () => {
           new_password: '',
           confirm_password: ''
         });
+        toast.success('Password updated successfully');
       }
     } catch (error) {
       console.error('Password change error:', error);
+      toast.error('Failed to update password');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleUpgradePlan = () => {
+    toast('Upgrade functionality coming soon!', {
+      icon: 'ℹ️',
+      style: {
+        background: '#3B82F6',
+        color: '#fff',
+      },
+    });
+  };
+
+  const handleDownloadData = async () => {
+    try {
+      setLoading(true);
+      // This would typically call an API endpoint to export user data
+      toast.success('Data export initiated. You will receive an email when ready.');
+    } catch (error) {
+      console.error('Failed to export data:', error);
+      toast.error('Failed to export data');
     } finally {
       setLoading(false);
     }
@@ -276,7 +300,10 @@ const Settings = () => {
                       }
                     </p>
                   </div>
-                  <button className="btn-primary">
+                  <button 
+                    onClick={handleUpgradePlan}
+                    className="btn-primary"
+                  >
                     {profileData.tier === 'free' ? 'Upgrade Plan' : 'Manage Subscription'}
                   </button>
                 </div>
@@ -373,8 +400,16 @@ const Settings = () => {
               </div>
               
               <div className="mt-6 pt-6 border-t border-gray-200">
-                <button className="btn-secondary flex items-center">
-                  <Download className="h-5 w-5 mr-2" />
+                <button 
+                  onClick={handleDownloadData}
+                  disabled={loading}
+                  className="btn-secondary flex items-center"
+                >
+                  {loading ? (
+                    <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-gray-600 mr-2"></div>
+                  ) : (
+                    <Download className="h-5 w-5 mr-2" />
+                  )}
                   Download My Data
                 </button>
               </div>

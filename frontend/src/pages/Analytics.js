@@ -13,7 +13,7 @@ import {
   Pie,
   Cell
 } from 'recharts';
-import { Calendar, Download, Filter, TrendingUp } from 'lucide-react';
+import { Download } from 'lucide-react';
 import { analyticsAPI } from '../services/api';
 import toast from 'react-hot-toast';
 
@@ -21,19 +21,11 @@ const Analytics = () => {
   const [analytics, setAnalytics] = useState(null);
   const [loading, setLoading] = useState(true);
   const [timeRange, setTimeRange] = useState(30);
-  const [selectedQR, setSelectedQR] = useState('all');
-
-  useEffect(() => {
-    fetchAnalytics();
-  }, [timeRange, selectedQR]);
 
   const fetchAnalytics = async () => {
     try {
       setLoading(true);
-      const response = await analyticsAPI.getDetailedStats({
-        days: timeRange,
-        qr_code_id: selectedQR === 'all' ? undefined : selectedQR
-      });
+      const response = await analyticsAPI.getDashboardStats(timeRange);
       setAnalytics(response.data);
     } catch (error) {
       console.error('Failed to fetch analytics:', error);
@@ -42,6 +34,36 @@ const Analytics = () => {
       setLoading(false);
     }
   };
+
+  const handleExportData = async () => {
+    try {
+      setLoading(true);
+      const response = await analyticsAPI.getDetailedStats({
+        days: timeRange,
+        format: 'csv'
+      });
+      
+      // Create and download CSV file
+      const blob = new Blob([response.data], { type: 'text/csv' });
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = `analytics-export-${new Date().toISOString().split('T')[0]}.csv`;
+      link.click();
+      window.URL.revokeObjectURL(url);
+      
+      toast.success('Analytics data exported successfully!');
+    } catch (error) {
+      console.error('Failed to export analytics:', error);
+      toast.error('Failed to export analytics data');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchAnalytics();
+  }, [timeRange]);
 
   const COLORS = ['#3B82F6', '#10B981', '#F59E0B', '#EF4444', '#8B5CF6'];
 
@@ -72,7 +94,11 @@ const Analytics = () => {
             <option value={90}>Last 90 days</option>
             <option value={365}>Last year</option>
           </select>
-          <button className="btn-secondary flex items-center">
+          <button 
+            onClick={handleExportData}
+            disabled={loading}
+            className="btn-secondary flex items-center"
+          >
             <Download className="h-4 w-4 mr-2" />
             Export
           </button>

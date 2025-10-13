@@ -1,9 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { 
   QrCode, 
   Search, 
-  Filter, 
-  Download, 
   Edit, 
   Trash2, 
   Eye,
@@ -11,22 +10,28 @@ import {
   MoreVertical
 } from 'lucide-react';
 import { useQR } from '../contexts/QRContext';
-import toast from 'react-hot-toast';
 
 const QRManagement = () => {
+  const navigate = useNavigate();
   const { qrCodes, loading, fetchQRCodes, deleteQRCode } = useQR();
   const [searchTerm, setSearchTerm] = useState('');
   const [filterType, setFilterType] = useState('all');
   const [sortBy, setSortBy] = useState('created_at');
   const [sortOrder, setSortOrder] = useState('desc');
+  const isRequesting = useRef(false);
 
   useEffect(() => {
-    fetchQRCodes({
-      search: searchTerm,
-      type: filterType,
-      sort_by: sortBy,
-      sort_order: sortOrder
-    });
+    if (!isRequesting.current) {
+      isRequesting.current = true;
+      fetchQRCodes({
+        search: searchTerm,
+        type: filterType,
+        sort_by: sortBy,
+        sort_order: sortOrder
+      }).finally(() => {
+        isRequesting.current = false;
+      });
+    }
   }, [searchTerm, filterType, sortBy, sortOrder]);
 
   const handleDelete = async (id) => {
@@ -40,8 +45,8 @@ const QRManagement = () => {
   };
 
   const filteredQRCodes = qrCodes.filter(qr => {
-    const matchesSearch = qr.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         qr.data?.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesSearch = qr.title?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                         qr.destination_url?.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesFilter = filterType === 'all' || qr.qr_type === filterType;
     return matchesSearch && matchesFilter;
   });
@@ -76,7 +81,10 @@ const QRManagement = () => {
           <h1 className="text-2xl font-bold text-gray-900">QR Code Management</h1>
           <p className="text-gray-600">Manage and organize your QR codes</p>
         </div>
-        <button className="btn-primary flex items-center">
+        <button 
+          onClick={() => navigate('/qr-designer')}
+          className="btn-primary flex items-center"
+        >
           <Plus className="h-5 w-5 mr-2" />
           Create QR Code
         </button>
@@ -143,10 +151,10 @@ const QRManagement = () => {
               <div className="flex items-start justify-between mb-4">
                 <div className="flex-1">
                   <h3 className="text-lg font-semibold text-gray-900 truncate">
-                    {qr.name || `QR Code ${qr.id}`}
+                    {qr.title || `QR Code ${qr.id}`}
                   </h3>
                   <p className="text-sm text-gray-600 truncate">
-                    {qr.data}
+                    {qr.destination_url}
                   </p>
                 </div>
                 <div className="flex items-center space-x-1">
@@ -233,7 +241,10 @@ const QRManagement = () => {
               : 'Create your first QR code to get started'
             }
           </p>
-          <button className="btn-primary">
+          <button 
+            onClick={() => navigate('/qr-designer')}
+            className="btn-primary"
+          >
             <Plus className="h-5 w-5 mr-2" />
             Create QR Code
           </button>
