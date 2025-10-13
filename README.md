@@ -90,16 +90,26 @@ FIREBASE_CLIENT_ID=your-client-id
 
 ## 🚀 Deployment
 
-### Railway (Recommended)
+### Vercel + Supabase (Recommended - Truly Free!)
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/ArmanShirzad/qrRobust-scanner/tree/qr-designer-v2)
+
+**Why Vercel + Supabase?**
+- ✅ **Truly Free**: No time limits, no sleep time
+- ✅ **Student-Friendly**: GitHub Student Pack benefits  
+- ✅ **Better Performance**: Global CDN, edge functions
+- ✅ **Modern Stack**: Serverless + PostgreSQL
+
+**Quick Deploy:**
+1. **Set up Supabase** (free PostgreSQL database)
+2. **Deploy to Vercel** (one-click deployment)
+3. **Configure environment variables**
+4. **See [VERCEL_SUPABASE_DEPLOYMENT.md](VERCEL_SUPABASE_DEPLOYMENT.md) for detailed instructions**
+
+### Railway (Alternative)
 [![Deploy on Railway](https://railway.app/button.svg)](https://railway.app/new/template?template=https://github.com/ArmanShirzad/qrRobust-scanner/tree/qr-designer-v2)
 
 ### Render (Alternative)
 [![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy)
-
-**Quick Deploy Options:**
-1. **Railway**: One-click deployment with `render.yaml`
-2. **Render**: Manual setup with PostgreSQL database
-3. **See [RENDER_DEPLOYMENT.md](RENDER_DEPLOYMENT.md) for detailed Render instructions**
 
 ### Other Platforms
 - **Render**: See [DEPLOYMENT.md](DEPLOYMENT.md)
