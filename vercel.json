@@ -1,58 +1,16 @@
 {
   "version": 2,
   "builds": [
-    {
-      "src": "app/main.py",
-      "use": "@vercel/python",
-      "config": {
-        "maxLambdaSize": "50mb"
-      }
-    },
-    {
-      "src": "frontend/package.json",
-      "use": "@vercel/static-build",
-      "config": {
-        "distDir": "build"
-      }
+    { 
+      "src": "frontend/package.json", 
+      "use": "@vercel/static-build", 
+      "config": { 
+        "distDir": "build" 
+      } 
     }
   ],
   "routes": [
-    {
-      "src": "/api/(.*)",
-      "dest": "/app/main.py"
-    },
-    {
-      "src": "/docs",
-      "dest": "/app/main.py"
-    },
-    {
-      "src": "/redoc",
-      "dest": "/app/main.py"
-    },
-    {
-      "src": "/health",
-      "dest": "/app/main.py"
-    },
-    {
-      "src": "/openapi.json",
-      "dest": "/app/main.py"
-    },
-    {
-      "src": "/(.*)",
-      "dest": "/index.html"
-    }
-  ],
-  "env": {
-    "PYTHON_VERSION": "3.11"
-  },
-  "build": {
-    "env": {
-      "NODE_VERSION": "18"
-    }
-  },
-  "functions": {
-    "app/main.py": {
-      "maxDuration": 30
-    }
-  }
+    { "handle": "filesystem" },
+    { "src": "/(.*)", "dest": "/index.html" }
+  ]
 }
