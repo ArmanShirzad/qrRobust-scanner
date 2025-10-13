@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Google } from 'lucide-react';
+import { Chrome } from 'lucide-react';
 import { firebaseAuth } from '../firebase/auth';
 import toast from 'react-hot-toast';
 
@@ -56,7 +56,7 @@ const FirebaseLogin = ({ onSuccess, onError }) => {
         <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-gray-600"></div>
       ) : (
         <>
-          <Google className="h-5 w-5 mr-2" />
+          <Chrome className="h-5 w-5 mr-2" />
           Continue with Google
         </>
       )}
