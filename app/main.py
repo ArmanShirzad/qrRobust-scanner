@@ -2,8 +2,6 @@
 
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.staticfiles import StaticFiles
-from fastapi.templating import Jinja2Templates
 import os
 
 from app.core.config import settings
@@ -34,20 +32,18 @@ app.add_middleware(RateLimitMiddleware)
 # Create upload directory
 os.makedirs(settings.upload_folder, exist_ok=True)
 
-# Mount static files
-app.mount("/static", StaticFiles(directory="static"), name="static")
-
-# Setup templates
-templates = Jinja2Templates(directory="templates")
+# Static files and templates are handled by Vercel routing
 
 # Include API routes
 app.include_router(api_router, prefix="/api/v1")
 
 
 @app.get("/")
-async def root(request: Request):
-    """Main page with upload form."""
-    return templates.TemplateResponse("index.html", {"request": request})
+async def root():
+    """Serve the React frontend."""
+    # In Vercel, the frontend will be served by the static build
+    # This endpoint should not be reached due to routing configuration
+    return {"message": "API is running", "frontend": "served by Vercel static build"}
 
 
 @app.get("/health")

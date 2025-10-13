@@ -1,6 +1,5 @@
 {
   "version": 2,
-  "name": "qr-designer-v2",
   "builds": [
     {
       "src": "app/main.py",
@@ -13,7 +12,7 @@
       "src": "frontend/package.json",
       "use": "@vercel/static-build",
       "config": {
-        "distDir": "build"
+        "distDir": "frontend/build"
       }
     }
   ],
@@ -46,14 +45,14 @@
   "env": {
     "PYTHON_VERSION": "3.11"
   },
-  "functions": {
-    "app/main.py": {
-      "maxDuration": 30
-    }
-  },
   "build": {
     "env": {
       "NODE_VERSION": "18"
+    }
+  },
+  "functions": {
+    "app/main.py": {
+      "maxDuration": 30
     }
   }
 }
