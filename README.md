@@ -69,7 +69,7 @@ curl -X POST http://localhost:5000/decode_base64 \
 
 ## 🚀 Deploy to Railway
 
-[![Deploy on Railway](https://railway.app/button.svg)](https://railway.app/template/your-template-id)
+[![Deploy on Railway](https://railway.app/button.svg)](https://railway.app/new/template?template=https://github.com/ArmanShirzad/qrRobust-scanner/tree/qr-scanner-v1)
 
 ### Manual Deployment:
 1. **Push your code to GitHub**
