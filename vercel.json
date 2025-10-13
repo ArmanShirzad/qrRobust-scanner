@@ -1,9 +1,13 @@
 {
   "version": 2,
+  "name": "qr-designer-v2",
   "builds": [
     {
       "src": "app/main.py",
-      "use": "@vercel/python"
+      "use": "@vercel/python",
+      "config": {
+        "maxLambdaSize": "50mb"
+      }
     },
     {
       "src": "frontend/package.json",
@@ -19,6 +23,22 @@
       "dest": "/app/main.py"
     },
     {
+      "src": "/docs",
+      "dest": "/app/main.py"
+    },
+    {
+      "src": "/redoc",
+      "dest": "/app/main.py"
+    },
+    {
+      "src": "/health",
+      "dest": "/app/main.py"
+    },
+    {
+      "src": "/openapi.json",
+      "dest": "/app/main.py"
+    },
+    {
       "src": "/(.*)",
       "dest": "/frontend/build/$1"
     }
@@ -29,6 +49,11 @@
   "functions": {
     "app/main.py": {
       "maxDuration": 30
+    }
+  },
+  "build": {
+    "env": {
+      "NODE_VERSION": "18"
     }
   }
 }
