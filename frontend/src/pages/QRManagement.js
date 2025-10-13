@@ -7,9 +7,12 @@ import {
   Trash2, 
   Eye,
   Plus,
-  MoreVertical
+  MoreVertical,
+  Download
 } from 'lucide-react';
 import { useQR } from '../contexts/QRContext';
+import { qrDesignerAPI } from '../services/api';
+import toast from 'react-hot-toast';
 
 const QRManagement = () => {
   const navigate = useNavigate();
@@ -18,6 +21,8 @@ const QRManagement = () => {
   const [filterType, setFilterType] = useState('all');
   const [sortBy, setSortBy] = useState('created_at');
   const [sortOrder, setSortOrder] = useState('desc');
+  const [qrImages, setQrImages] = useState({});
+  const [loadingImages, setLoadingImages] = useState({});
   const isRequesting = useRef(false);
 
   useEffect(() => {
@@ -41,6 +46,59 @@ const QRManagement = () => {
       } catch (error) {
         console.error('Failed to delete QR code:', error);
       }
+    }
+  };
+
+  const fetchQRCodeImage = async (qrId) => {
+    if (qrImages[qrId] || loadingImages[qrId]) return;
+    
+    setLoadingImages(prev => ({ ...prev, [qrId]: true }));
+    try {
+      const response = await qrDesignerAPI.getQRCodeImage(qrId);
+      setQrImages(prev => ({ ...prev, [qrId]: response.data.image_data }));
+    } catch (error) {
+      console.error('Failed to fetch QR code image:', error);
+      toast.error('Failed to load QR code image');
+    } finally {
+      setLoadingImages(prev => ({ ...prev, [qrId]: false }));
+    }
+  };
+
+  const handleView = (qr) => {
+    // Navigate to QR code details page or open modal
+    navigate(`/qr-codes/${qr.id}`);
+  };
+
+  const handleEdit = (qr) => {
+    // Navigate to QR designer with pre-filled data
+    navigate('/qr-designer', { state: { editQR: qr } });
+  };
+
+  const handleDownload = async (qr) => {
+    try {
+      if (!qrImages[qr.id]) {
+        await fetchQRCodeImage(qr.id);
+      }
+      
+      const imageData = qrImages[qr.id];
+      if (imageData) {
+        const link = document.createElement('a');
+        link.href = `data:image/png;base64,${imageData}`;
+        link.download = `${qr.title || 'qr-code'}.png`;
+        link.click();
+        toast.success('QR code downloaded!');
+      }
+    } catch (error) {
+      console.error('Failed to download QR code:', error);
+      toast.error('Failed to download QR code');
+    }
+  };
+
+  const handleQRClick = (qr) => {
+    // Show QR code in larger view or copy to clipboard
+    if (qr.destination_url) {
+      navigator.clipboard.writeText(qr.destination_url);
+      toast.success('URL copied to clipboard!');
     }
   };
 
@@ -161,23 +219,80 @@ const QRManagement = () => {
                   <span className={`px-2 py-1 text-xs font-medium rounded-full ${getQRTypeColor(qr.qr_type)}`}>
                     {qr.qr_type}
                   </span>
-                  <button className="p-1 text-gray-400 hover:text-gray-600">
-                    <MoreVertical className="h-4 w-4" />
-                  </button>
+                  <div className="relative">
+                    <button 
+                      className="p-1 text-gray-400 hover:text-gray-600"
+                      onClick={() => {
+                        // Toggle dropdown menu
+                        const menu = document.getElementById(`menu-${qr.id}`);
+                        if (menu) {
+                          menu.classList.toggle('hidden');
+                        }
+                      }}
+                    >
+                      <MoreVertical className="h-4 w-4" />
+                    </button>
+                    <div 
+                      id={`menu-${qr.id}`}
+                      className="hidden absolute right-0 mt-1 w-48 bg-white rounded-md shadow-lg z-10 border"
+                    >
+                      <div className="py-1">
+                        <button
+                          onClick={() => handleDownload(qr)}
+                          className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                        >
+                          <Download className="h-4 w-4 inline mr-2" />
+                          Download
+                        </button>
+                        <button
+                          onClick={() => {
+                            navigator.clipboard.writeText(qr.destination_url);
+                            toast.success('URL copied to clipboard!');
+                          }}
+                          className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                        >
+                          Copy URL
+                        </button>
+                        <button
+                          onClick={() => handleView(qr)}
+                          className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                        >
+                          <Eye className="h-4 w-4 inline mr-2" />
+                          View Details
+                        </button>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
 
               {/* QR Code Preview */}
               <div className="flex justify-center mb-4">
-                <div className="w-32 h-32 bg-gray-100 rounded-lg flex items-center justify-center">
-                  {qr.image_data ? (
+                <div 
+                  className="w-32 h-32 bg-gray-100 rounded-lg flex items-center justify-center cursor-pointer hover:bg-gray-200 transition-colors"
+                  onClick={() => handleQRClick(qr)}
+                >
+                  {loadingImages[qr.id] ? (
+                    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+                  ) : qrImages[qr.id] ? (
                     <img
-                      src={`data:image/png;base64,${qr.image_data}`}
+                      src={`data:image/png;base64,${qrImages[qr.id]}`}
                       alt="QR Code"
                       className="w-full h-full object-contain"
                     />
                   ) : (
-                    <QrCode className="h-8 w-8 text-gray-400" />
+                    <div className="text-center">
+                      <QrCode className="h-8 w-8 text-gray-400 mx-auto mb-2" />
+                      <button 
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          fetchQRCodeImage(qr.id);
+                        }}
+                        className="text-xs text-blue-600 hover:text-blue-800"
+                      >
+                        Load Preview
+                      </button>
+                    </div>
                   )}
                 </div>
               </div>
@@ -198,13 +313,26 @@ const QRManagement = () => {
 
               {/* Actions */}
               <div className="flex space-x-2">
-                <button className="flex-1 btn-secondary text-sm flex items-center justify-center">
+                <button 
+                  onClick={() => handleView(qr)}
+                  className="flex-1 btn-secondary text-sm flex items-center justify-center"
+                >
                   <Eye className="h-4 w-4 mr-1" />
                   View
                 </button>
-                <button className="flex-1 btn-secondary text-sm flex items-center justify-center">
+                <button 
+                  onClick={() => handleEdit(qr)}
+                  className="flex-1 btn-secondary text-sm flex items-center justify-center"
+                >
                   <Edit className="h-4 w-4 mr-1" />
                   Edit
+                </button>
+                <button 
+                  onClick={() => handleDownload(qr)}
+                  className="px-3 py-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
+                  title="Download QR Code"
+                >
+                  <Download className="h-4 w-4" />
                 </button>
                 <button 
                   onClick={() => handleDelete(qr.id)}

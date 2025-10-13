@@ -88,6 +88,7 @@ export const qrDesignerAPI = {
   designAndSave: (formData) => api.post('/qr-designer/design-and-save', formData, {
     headers: { 'Content-Type': 'multipart/form-data' }
   }),
+  getQRCodeImage: (qrId) => api.get(`/qr-designer/qr-code/${qrId}/image`),
   getStyles: () => api.get('/qr-designer/styles'),
   getTemplates: () => api.get('/qr-designer/templates'),
   preview: (data) => {

@@ -120,6 +120,60 @@ async def design_qr_code(
         )
 
 
+@router.get("/qr-code/{qr_id}/image")
+async def get_qr_code_image(
+    qr_id: int,
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
+    """Get QR code image for a saved QR code."""
+    # Get QR code from database
+    qr_code = db.query(QRCode).filter(
+        QRCode.id == qr_id,
+        QRCode.user_id == current_user.id
+    ).first()
+    
+    if not qr_code:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="QR code not found"
+        )
+    
+    # Generate QR code from stored parameters
+    options = {
+        "data": qr_code.destination_url,
+        "size": qr_code.size,
+        "border": qr_code.border,
+        "error_correction": qr_code.error_correction_level,
+        "fill_color": qr_code.foreground_color,
+        "back_color": qr_code.background_color,
+        "module_drawer": "square",
+        "color_mask": "solid",
+        "corner_radius": 0
+    }
+    
+    # Validate and create QR code
+    validated_options = qr_designer.validate_design_options(options)
+    data = validated_options.pop("data")
+    result = qr_designer.create_qr_code(data=data, **validated_options)
+    
+    if not result["success"]:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Failed to generate QR code: {result['error']}"
+        )
+    
+    return {
+        "image_data": result["image_data"],
+        "qr_code": {
+            "id": qr_code.id,
+            "title": qr_code.title,
+            "destination_url": qr_code.destination_url,
+            "size": qr_code.size
+        }
+    }
+
+
 @router.post("/design-and-save")
 async def design_and_save_qr_code(
     data: str = Form(...),
