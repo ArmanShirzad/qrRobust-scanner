@@ -1,4 +1,4 @@
-# Production requirements
+# Production requirements for QR Designer V2
 fastapi==0.104.1
 uvicorn[standard]==0.24.0
 sqlalchemy==2.0.23
@@ -17,3 +17,5 @@ httpx==0.25.2
 jinja2==3.1.2
 aiofiles==23.2.1
 slowapi==0.1.9
+firebase-admin==6.4.0
+gunicorn==21.2.0

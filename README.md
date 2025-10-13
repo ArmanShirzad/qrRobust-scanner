@@ -93,13 +93,13 @@ FIREBASE_CLIENT_ID=your-client-id
 ### Railway (Recommended)
 [![Deploy on Railway](https://railway.app/button.svg)](https://railway.app/new/template?template=https://github.com/ArmanShirzad/qrRobust-scanner/tree/qr-designer-v2)
 
-1. **Push your code to GitHub**
-2. **Go to [railway.app](https://railway.app)**
-3. **Sign up/login with GitHub**
-4. **Click "New Project" → "Deploy from GitHub repo"**
-5. **Select your repository and `qr-designer-v2` branch**
-6. **Configure environment variables**
-7. **Deploy!**
+### Render (Alternative)
+[![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy)
+
+**Quick Deploy Options:**
+1. **Railway**: One-click deployment with `render.yaml`
+2. **Render**: Manual setup with PostgreSQL database
+3. **See [RENDER_DEPLOYMENT.md](RENDER_DEPLOYMENT.md) for detailed Render instructions**
 
 ### Other Platforms
 - **Render**: See [DEPLOYMENT.md](DEPLOYMENT.md)
