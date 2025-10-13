@@ -1,20 +1,20 @@
-# 🚀 Vercel + Supabase Deployment Guide
+# Vercel + Supabase Deployment Guide
 
-## 🎯 **Why Vercel + Supabase?**
+## **Why Vercel + Supabase?**
 
-- ✅ **Truly Free**: No time limits, no sleep time
-- ✅ **Student-Friendly**: GitHub Student Pack benefits
-- ✅ **Better Performance**: Global CDN, edge functions
-- ✅ **Modern Stack**: Serverless + PostgreSQL
-- ✅ **Easy Setup**: One-click deployment
+- **Truly Free**: No time limits, no sleep time
+- **Student-Friendly**: GitHub Student Pack benefits
+- **Better Performance**: Global CDN, edge functions
+- **Modern Stack**: Serverless + PostgreSQL
+- **Easy Setup**: One-click deployment
 
-## 📋 **Prerequisites**
+## **Prerequisites**
 
 1. **GitHub Account** (for Vercel integration)
 2. **Supabase Account** (free tier)
 3. **GitHub Student Pack** (optional, but recommended)
 
-## 🔧 **Step 1: Set Up Supabase**
+## **Step 1: Set Up Supabase**
 
 ### 1.1 Create Supabase Project
 1. **Go to [supabase.com](https://supabase.com)**
@@ -87,7 +87,7 @@ CREATE POLICY "Users can delete own QR codes" ON qr_codes FOR DELETE USING (auth
 3. **Enable Google OAuth** (optional)
 4. **Configure redirect URLs**: `https://your-app.vercel.app`
 
-## 🚀 **Step 2: Deploy to Vercel**
+## **Step 2: Deploy to Vercel**
 
 ### 2.1 Connect GitHub to Vercel
 1. **Go to [vercel.com](https://vercel.com)**
@@ -137,7 +137,7 @@ REACT_APP_SUPABASE_ANON_KEY=your-supabase-anon-key
 2. **Wait for build** (2-3 minutes)
 3. **Your app will be live at**: `https://your-app.vercel.app`
 
-## 🔧 **Step 3: Configure Backend API**
+## **Step 3: Configure Backend API**
 
 ### 3.1 Create API Routes
 Vercel will automatically create API routes from your FastAPI app:
@@ -148,7 +148,7 @@ Vercel will automatically create API routes from your FastAPI app:
 ### 3.2 Update Frontend API Configuration
 The frontend will automatically use the Vercel API URL through environment variables.
 
-## 🎉 **Step 4: Test Your Deployment**
+## **Step 4: Test Your Deployment**
 
 ### 4.1 Test Frontend
 1. **Visit**: `https://your-app.vercel.app`
@@ -165,7 +165,7 @@ The frontend will automatically use the Vercel API URL through environment varia
 2. **Check**: Tables created successfully
 3. **Test**: Insert/query data
 
-## 🔐 **Step 5: Authentication Setup**
+## **Step 5: Authentication Setup**
 
 ### 5.1 Supabase Auth (Recommended)
 1. **Frontend**: Use Supabase client for auth
@@ -177,7 +177,7 @@ The frontend will automatically use the Vercel API URL through environment varia
 2. **Use Firebase for authentication**
 3. **Use Supabase for database only**
 
-## 📊 **Step 6: Monitoring & Analytics**
+## **Step 6: Monitoring & Analytics**
 
 ### 6.1 Vercel Analytics
 - **Built-in**: Performance metrics
@@ -189,7 +189,7 @@ The frontend will automatically use the Vercel API URL through environment varia
 - **Auth**: User management
 - **Storage**: File uploads
 
-## 🚀 **Deployment URLs**
+## **Deployment URLs**
 
 After deployment:
 - **Frontend**: `https://your-app.vercel.app`
@@ -197,7 +197,7 @@ After deployment:
 - **API Docs**: `https://your-app.vercel.app/api/docs`
 - **Health Check**: `https://your-app.vercel.app/api/health`
 
-## 🔄 **Updates & Maintenance**
+## **Updates & Maintenance**
 
 ### Deploying Updates:
 1. **Push changes to `qr-designer-v2` branch**
@@ -211,7 +211,7 @@ After deployment:
 supabase db push
 ```
 
-## 💰 **Cost Breakdown**
+## **Cost Breakdown**
 
 ### Free Tier Limits:
 - **Vercel**: Unlimited static sites, 100GB bandwidth
@@ -222,14 +222,14 @@ supabase db push
 - **Vercel Pro**: $20/month (team features)
 - **Supabase Pro**: $25/month (more storage)
 
-## 🎯 **Student Benefits**
+## **Student Benefits**
 
 ### GitHub Student Pack:
 - **Vercel**: Extra credits and features
 - **Supabase**: Extended free tier
 - **Total Savings**: $500+/month
 
-## 🆘 **Troubleshooting**
+## **Troubleshooting**
 
 ### Common Issues:
 
@@ -260,11 +260,11 @@ vercel dev
 supabase status
 ```
 
-## 🎊 **Success!**
+## **Success!**
 
 Your QR Designer V2 is now deployed on:
-- ✅ **Vercel**: Frontend + API
-- ✅ **Supabase**: Database + Auth
-- ✅ **Free Forever**: No time limits!
+- **Vercel**: Frontend + API
+- **Supabase**: Database + Auth
+- **Free Forever**: No time limits!
 
-**Your app is live and ready for users!** 🚀
+**Your app is live and ready for users!**

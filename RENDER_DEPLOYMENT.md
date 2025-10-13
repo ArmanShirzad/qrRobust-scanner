@@ -1,12 +1,12 @@
-# 🚀 Render Deployment Guide for QR Designer V2
+# Render Deployment Guide for QR Designer V2
 
-## 📋 Prerequisites
+## Prerequisites
 
 1. **GitHub Repository**: Your code should be pushed to GitHub
 2. **Firebase Project**: Set up Firebase authentication (see FIREBASE_SETUP.md)
 3. **Render Account**: Sign up at [render.com](https://render.com)
 
-## 🎯 Quick Deployment (Recommended)
+## Quick Deployment (Recommended)
 
 ### Option 1: One-Click Deploy with render.yaml
 
@@ -19,7 +19,7 @@
 
 ### Option 2: Manual Deployment
 
-## 🔧 Step-by-Step Manual Deployment
+## Step-by-Step Manual Deployment
 
 ### 1. Create Database Service
 
@@ -86,7 +86,7 @@
 
 5. **Click "Create Static Site"**
 
-## 🔐 Firebase Configuration
+## Firebase Configuration
 
 ### 1. Get Firebase Config
 
@@ -113,7 +113,7 @@ const firebaseConfig = {
 };
 ```
 
-## 🚀 Deployment URLs
+## Deployment URLs
 
 After deployment, you'll get:
 
@@ -121,7 +121,7 @@ After deployment, you'll get:
 - **Backend API**: `https://qr-designer-backend.onrender.com`
 - **API Docs**: `https://qr-designer-backend.onrender.com/docs`
 
-## 🔧 Troubleshooting
+## Troubleshooting
 
 ### Common Issues:
 
@@ -158,7 +158,7 @@ After deployment, you'll get:
 curl https://qr-designer-backend.onrender.com/docs
 ```
 
-## 📊 Monitoring
+## Monitoring
 
 ### Render Dashboard Features:
 - **Logs**: Real-time application logs
@@ -171,7 +171,7 @@ curl https://qr-designer-backend.onrender.com/docs
 - **Frontend**: Static file serving
 - **Database**: Connection status
 
-## 🔄 Updates and Maintenance
+## Updates and Maintenance
 
 ### Deploying Updates:
 1. **Push changes to `qr-designer-v2` branch**
@@ -184,7 +184,7 @@ curl https://qr-designer-backend.onrender.com/docs
 alembic upgrade head
 ```
 
-## 💰 Pricing
+## Pricing
 
 ### Free Tier Limits:
 - **Web Services**: 750 hours/month
@@ -197,17 +197,17 @@ alembic upgrade head
 - **Standard Plan**: $25/month per service
 - **Pro Plan**: $85/month per service
 
-## 🎉 Success!
+## Success!
 
 Once deployed, your QR Designer V2 will be live at:
 **https://qr-designer-frontend.onrender.com**
 
 Users can:
-- ✅ Sign in with Google
-- ✅ Create custom QR codes
-- ✅ Manage their QR code library
-- ✅ Download QR codes
-- ✅ View analytics
+- Sign in with Google
+- Create custom QR codes
+- Manage their QR code library
+- Download QR codes
+- View analytics
 
 ---
 

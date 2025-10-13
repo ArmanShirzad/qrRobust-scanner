@@ -1,6 +1,6 @@
-# 🔥 Firebase Authentication Setup Guide
+# Firebase Authentication Setup Guide
 
-## 📋 **Step 1: Create Firebase Project**
+## **Step 1: Create Firebase Project**
 
 1. Go to [Firebase Console](https://console.firebase.google.com/)
 2. Click "Create a project"
@@ -8,7 +8,7 @@
 4. Enable Google Analytics (optional)
 5. Click "Create project"
 
-## 🔧 **Step 2: Enable Authentication**
+## **Step 2: Enable Authentication**
 
 1. In Firebase Console, go to "Authentication"
 2. Click "Get started"
@@ -18,7 +18,7 @@
    - `localhost` (for development)
    - `your-domain.com` (for production)
 
-## 🔑 **Step 3: Get Service Account Key**
+## **Step 3: Get Service Account Key**
 
 1. Go to "Project Settings" (gear icon)
 2. Go to "Service accounts" tab
@@ -27,7 +27,7 @@
 5. Rename it to `firebase-service-account.json`
 6. Place it in your project root directory
 
-## ⚙️ **Step 4: Configure Frontend**
+## **Step 4: Configure Frontend**
 
 1. Go to "Project Settings" → "General" tab
 2. Scroll down to "Your apps"
@@ -35,7 +35,7 @@
 4. Register app with nickname: `qr-app-frontend`
 5. Copy the Firebase config object
 
-## 📝 **Step 5: Update Frontend Configuration**
+## **Step 5: Update Frontend Configuration**
 
 Update `/repos/newproj/frontend/src/firebase/config.js`:
 
@@ -50,7 +50,7 @@ const firebaseConfig = {
 };
 ```
 
-## 🔒 **Step 6: Update Backend Configuration**
+## **Step 6: Update Backend Configuration**
 
 ### Option A: Service Account File (Recommended for Development)
 1. Place `firebase-service-account.json` in project root
@@ -66,7 +66,7 @@ FIREBASE_CLIENT_EMAIL=firebase-adminsdk-xxxxx@your-project.iam.gserviceaccount.c
 FIREBASE_CLIENT_ID=your-client-id
 ```
 
-## 🚀 **Step 7: Test Firebase Authentication**
+## **Step 7: Test Firebase Authentication**
 
 1. Start your backend server
 2. Start your frontend server
@@ -75,7 +75,7 @@ FIREBASE_CLIENT_ID=your-client-id
 5. Complete Google OAuth flow
 6. Verify user is created in your database
 
-## 🔍 **Step 8: Verify Integration**
+## **Step 8: Verify Integration**
 
 ### Check Backend Logs:
 ```bash
@@ -94,7 +94,7 @@ SELECT * FROM users WHERE email LIKE '%@gmail.com';
 - After sign-in, user should be redirected to dashboard
 - User info should be displayed in the app
 
-## 🛠️ **Troubleshooting**
+## **Troubleshooting**
 
 ### Common Issues:
 
@@ -117,7 +117,7 @@ SELECT * FROM users WHERE email LIKE '%@gmail.com';
    - Verify email is verified in Firebase
    - Check database connection
 
-## 📊 **Firebase Console Features**
+## **Firebase Console Features**
 
 - **Authentication**: View signed-in users
 - **Analytics**: Track user engagement
@@ -125,7 +125,7 @@ SELECT * FROM users WHERE email LIKE '%@gmail.com';
 - **Crashlytics**: Track app crashes
 - **Remote Config**: Dynamic configuration
 
-## 🔐 **Security Best Practices**
+## **Security Best Practices**
 
 1. **Never commit service account keys to Git**
 2. **Use environment variables in production**
@@ -133,7 +133,7 @@ SELECT * FROM users WHERE email LIKE '%@gmail.com';
 4. **Enable App Check for additional security**
 5. **Monitor authentication logs**
 
-## 📈 **Production Deployment**
+## **Production Deployment**
 
 ### Railway/Render:
 1. Add Firebase environment variables
@@ -146,7 +146,7 @@ SELECT * FROM users WHERE email LIKE '%@gmail.com';
 2. Build and deploy containers
 3. Verify Firebase connection
 
-## 🎯 **Next Steps**
+## **Next Steps**
 
 1. **Add more providers**: Facebook, Twitter, GitHub
 2. **Implement user profiles**: Store additional user data
@@ -154,7 +154,7 @@ SELECT * FROM users WHERE email LIKE '%@gmail.com';
 4. **Implement social features**: User avatars, profiles
 5. **Add analytics**: Track user behavior
 
-## 📞 **Support**
+## **Support**
 
 - [Firebase Documentation](https://firebase.google.com/docs)
 - [Firebase Auth Guide](https://firebase.google.com/docs/auth)
@@ -162,4 +162,4 @@ SELECT * FROM users WHERE email LIKE '%@gmail.com';
 
 ---
 
-**🎉 Congratulations!** You now have Firebase authentication integrated with your QR app! Users can sign in with their Google accounts seamlessly.
+**Congratulations!** You now have Firebase authentication integrated with your QR app! Users can sign in with their Google accounts seamlessly.

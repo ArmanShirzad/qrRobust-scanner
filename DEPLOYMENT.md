@@ -1,6 +1,6 @@
-# 🚀 QR App Deployment Guide
+# QR App Deployment Guide
 
-## 📊 **Scale-Based Deployment Strategies**
+## **Scale-Based Deployment Strategies**
 
 ### **1. Small Scale (1-100 users) - SQLite + Single Server**
 ```bash
@@ -100,7 +100,7 @@ docker-compose up -d
 
 ---
 
-## 🔧 **Database Migration Strategy**
+## **Database Migration Strategy**
 
 ### **Step 1: Backup Current Data**
 ```bash
@@ -133,7 +133,7 @@ DATABASE_URL=postgresql://qr_user:password@localhost:5432/qr_app
 
 ---
 
-## 📈 **Performance Optimization**
+## **Performance Optimization**
 
 ### **Database Optimizations:**
 ```sql
@@ -178,7 +178,7 @@ def get_qr_image_url(qr_id: int) -> str:
 
 ---
 
-## 🔒 **Security Considerations**
+## **Security Considerations**
 
 ### **Production Security Checklist:**
 - [ ] Change default JWT secret key
@@ -203,7 +203,7 @@ ALLOWED_ORIGINS=https://yourdomain.com
 
 ---
 
-## 📊 **Monitoring & Maintenance**
+## **Monitoring & Maintenance**
 
 ### **Health Checks:**
 ```python
@@ -242,7 +242,7 @@ aws s3 cp backup_$(date +%Y%m%d).sql s3://your-backup-bucket/
 
 ---
 
-## 💰 **Cost Estimation**
+## **Cost Estimation**
 
 | Scale | Users | Infrastructure | Monthly Cost |
 |-------|-------|---------------|--------------|
@@ -252,7 +252,7 @@ aws s3 cp backup_$(date +%Y%m%d).sql s3://your-backup-bucket/
 
 ---
 
-## 🚀 **Quick Start Commands**
+## **Quick Start Commands**
 
 ```bash
 # 1. Clone and setup
@@ -271,4 +271,4 @@ docker-compose ps
 docker-compose logs -f
 ```
 
-This gives you a complete deployment strategy that scales from small to enterprise level! 🎯
+This gives you a complete deployment strategy that scales from small to enterprise level!

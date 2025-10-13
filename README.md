@@ -1,19 +1,19 @@
-# 🎨 QR Code Designer V2
+# QR Code Designer V2
 
 A modern FastAPI + React application for creating, designing, and managing QR codes with advanced customization features.
 
-## 🌟 Features
+## Features
 
-- 🎨 **Advanced QR Design**: Custom colors, logos, backgrounds, and templates
-- 🔐 **Firebase Authentication**: Google sign-in integration
-- 📊 **QR Management**: Create, edit, download, and organize QR codes
-- 📱 **Responsive Design**: Beautiful React frontend with Tailwind CSS
-- 🚀 **FastAPI Backend**: High-performance Python API
-- 💾 **Database Integration**: SQLite with PostgreSQL migration support
-- 📈 **Analytics**: Track QR code usage and performance
-- 🔄 **Real-time Preview**: Live preview of QR code designs
+- **Advanced QR Design**: Custom colors, logos, backgrounds, and templates
+- **Firebase Authentication**: Google sign-in integration
+- **QR Management**: Create, edit, download, and organize QR codes
+- **Responsive Design**: Beautiful React frontend with Tailwind CSS
+- **FastAPI Backend**: High-performance Python API
+- **Database Integration**: SQLite with PostgreSQL migration support
+- **Analytics**: Track QR code usage and performance
+- **Real-time Preview**: Live preview of QR code designs
 
-## 🚀 Quick Start
+## Quick Start
 
 ### Prerequisites
 - Python 3.8+
@@ -61,7 +61,7 @@ npm start
 - Backend API: http://localhost:8000
 - API Docs: http://localhost:8000/docs
 
-## 🔧 Configuration
+## Configuration
 
 ### Environment Variables
 Create a `.env` file with:
@@ -88,16 +88,16 @@ FIREBASE_CLIENT_ID=your-client-id
 4. Update environment variables
 5. See [FIREBASE_SETUP.md](FIREBASE_SETUP.md) for detailed instructions
 
-## 🚀 Deployment
+## Deployment
 
 ### Vercel + Supabase (Recommended - Truly Free!)
 [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/ArmanShirzad/qrRobust-scanner/tree/qr-designer-v2)
 
 **Why Vercel + Supabase?**
-- ✅ **Truly Free**: No time limits, no sleep time
-- ✅ **Student-Friendly**: GitHub Student Pack benefits  
-- ✅ **Better Performance**: Global CDN, edge functions
-- ✅ **Modern Stack**: Serverless + PostgreSQL
+- **Truly Free**: No time limits, no sleep time
+- **Student-Friendly**: GitHub Student Pack benefits  
+- **Better Performance**: Global CDN, edge functions
+- **Modern Stack**: Serverless + PostgreSQL
 
 **Quick Deploy:**
 1. **Set up Supabase** (free PostgreSQL database)
@@ -116,7 +116,7 @@ FIREBASE_CLIENT_ID=your-client-id
 - **Heroku**: See [DEPLOYMENT.md](DEPLOYMENT.md)
 - **Docker**: See [docker-compose.yml](docker-compose.yml)
 
-## 📚 API Documentation
+## API Documentation
 
 ### Authentication Endpoints
 - `POST /api/v1/auth/firebase-verify` - Verify Firebase token
@@ -132,7 +132,7 @@ FIREBASE_CLIENT_ID=your-client-id
 - `PUT /api/v1/qr-codes/{id}` - Update QR code
 - `DELETE /api/v1/qr-codes/{id}` - Delete QR code
 
-## 🏗️ Project Structure
+## Project Structure
 
 ```
 ├── app/                    # FastAPI backend
@@ -153,7 +153,7 @@ FIREBASE_CLIENT_ID=your-client-id
 └── frontend/package.json  # Node.js dependencies
 ```
 
-## 🛠️ Technologies Used
+## Technologies Used
 
 ### Backend
 - **FastAPI**: Modern Python web framework
@@ -174,7 +174,7 @@ FIREBASE_CLIENT_ID=your-client-id
 - **SQLite**: Development database
 - **PostgreSQL**: Production database (migratable)
 
-## 🧪 Testing
+## Testing
 
 ```bash
 # Backend tests
@@ -185,7 +185,7 @@ cd frontend
 npm test
 ```
 
-## 📈 Features Roadmap
+## Features Roadmap
 
 - [ ] QR code analytics dashboard
 - [ ] Bulk QR code generation
@@ -194,7 +194,7 @@ npm test
 - [ ] User subscription tiers
 - [ ] QR code usage tracking
 
-## 🤝 Contributing
+## Contributing
 
 1. Fork the repository
 2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
@@ -202,11 +202,11 @@ npm test
 4. Push to the branch (`git push origin feature/AmazingFeature`)
 5. Open a Pull Request
 
-## 📄 License
+## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-## 🙏 Acknowledgments
+## Acknowledgments
 
 - [FastAPI](https://fastapi.tiangolo.com/) for the web framework
 - [React](https://reactjs.org/) for the frontend
@@ -216,5 +216,5 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ---
 
 **Version**: QR Designer V2  
-**Status**: 🚀 Ready for Deployment  
+**Status**: Ready for Deployment  
 **Tech Stack**: FastAPI + React + Firebase + PostgreSQL
