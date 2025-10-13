@@ -1,0 +1,39 @@
+# QR Code Reader Premium Platform - Environment Variables Template
+# Copy this file to .env and fill in your actual values
+
+# Database
+DATABASE_URL=postgresql://postgres:[YOUR_PASSWORD]@db.[YOUR_PROJECT_REF].supabase.co:5432/postgres
+
+# Supabase
+SUPABASE_URL=https://[YOUR_PROJECT_REF].supabase.co
+SUPABASE_ANON_KEY=[YOUR_ANON_KEY]
+SUPABASE_SERVICE_ROLE_KEY=[YOUR_SERVICE_ROLE_KEY]
+
+# JWT
+JWT_SECRET_KEY=your-super-secret-jwt-key-change-in-production
+JWT_ALGORITHM=HS256
+JWT_ACCESS_TOKEN_EXPIRE_MINUTES=30
+JWT_REFRESH_TOKEN_EXPIRE_DAYS=7
+
+# App
+SECRET_KEY=your-secret-key-change-in-production
+DEBUG=false
+ENVIRONMENT=production
+
+# CORS
+CORS_ORIGINS=https://your-app.vercel.app
+CORS_ALLOW_CREDENTIALS=true
+CORS_ALLOW_METHODS=GET,POST,PUT,DELETE,OPTIONS
+CORS_ALLOW_HEADERS=*
+
+# File Upload
+UPLOAD_FOLDER=uploads
+MAX_FILE_SIZE=16777216
+ALLOWED_EXTENSIONS=png,jpg,jpeg,gif,bmp,tiff
+
+# Rate Limiting
+RATE_LIMIT_PER_MINUTE=60
+RATE_LIMIT_PER_HOUR=1000
+
+# Frontend API URL
+REACT_APP_API_URL=https://your-app.vercel.app/api/v1

@@ -1,0 +1,20 @@
+# QR Code Reader - Supabase Only Configuration
+# Copy this to .env and fill in your actual values
+
+# Supabase Configuration (you have these)
+SUPABASE_URL=https://rmzozjbdslkdvxtrmsue.supabase.co
+SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJtem96amJkc2xrZHZ4dHJtc3VlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjAyOTg4NjYsImV4cCI6MjA3NTg3NDg2Nn0.9K2cKigG1rmEpG-A8QU88ywZObflIAz5lTevPi7Ff2w
+
+# Database URL (you have this)
+DATABASE_URL=postgresql://postgres:QuJ5PC9x9.$*Tdi@db.rmzozjbdslkdvxtrmsue.supabase.co:5432/postgres
+
+# Frontend Configuration
+REACT_APP_SUPABASE_URL=https://rmzozjbdslkdvxtrmsue.supabase.co
+REACT_APP_SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJtem96amJkc2xrZHZ4dHJtc3VlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjAyOTg4NjYsImV4cCI6MjA3NTg3NDg2Nn0.9K2cKigG1rmEpG-A8QU88ywZObflIAz5lTevPi7Ff2w
+
+# CORS Origins (replace with your actual Vercel URL)
+CORS_ORIGINS=https://your-actual-vercel-app.vercel.app
+
+# Optional: File upload settings
+UPLOAD_FOLDER=uploads
+MAX_FILE_SIZE=16777216
