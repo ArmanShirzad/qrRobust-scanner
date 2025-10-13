@@ -1,10 +1,17 @@
 # 🚀 Quick Start Guide for Next Session
 
 ## 📋 **Current Project Status**
-- **QR Code App** with FastAPI backend + React frontend
-- **Firebase Authentication** implemented but needs configuration
-- **QR Designer & Management** fully functional
-- **Database**: SQLite (ready for PostgreSQL migration)
+
+### **Dual App Strategy:**
+- **QR Scanner (V1)**: Deployed on Railway (deployer branch)
+  - URL: https://qr-scanner-app-production.up.railway.app/
+  - Purpose: Upload & decode QR codes
+  
+- **QR Designer (V2)**: Ready for deployment (enterprisescaler branch)
+  - Purpose: Create & manage QR codes
+  - **Firebase Authentication** implemented but needs configuration
+  - **QR Designer & Management** fully functional
+  - **Database**: SQLite (ready for PostgreSQL migration)
 
 ## 🔥 **Immediate Next Steps**
 
@@ -28,14 +35,17 @@ cd /repos/newproj/frontend && npm start
 # Test Google sign-in on login page
 ```
 
-### **3. Deploy to Production**
+### **3. Deploy QR Designer (V2) to Production**
 ```bash
-# Choose platform:
-- Railway (recommended)
-- Render
-- Your own server
+# Create new Railway project for QR Designer
+# Deploy from enterprisescaler branch
+# Configure environment variables:
+FIREBASE_PROJECT_ID=your-project-id
+FIREBASE_PRIVATE_KEY=your-private-key
+DATABASE_URL=postgresql://...
+JWT_SECRET_KEY=your-secret-key
 
-# Follow DEPLOYMENT.md guide
+# Keep QR Scanner (V1) running on current Railway project
 ```
 
 ## 📁 **Key Files to Remember**
@@ -55,17 +65,17 @@ cd /repos/newproj/frontend && npm start
 
 ### **Context to Provide:**
 ```
-"I'm working on a QR code app with FastAPI backend and React frontend. 
-We just implemented Firebase authentication with Google sign-in, but it needs 
-configuration. The QR designer and management are working. I'm on the 
-enterprisescaler branch. I need help with [specific task]."
+"I'm working on dual QR apps - a QR Scanner (V1) deployed on Railway and a 
+QR Designer (V2) with Firebase auth on enterprisescaler branch. The QR Designer 
+needs Firebase configuration and deployment. I need help with [specific task]."
 ```
 
 ### **Current Issues:**
-- Firebase not configured (needs service account)
-- Google sign-in button shows but doesn't work
-- Ready for production deployment
-- Database migration to PostgreSQL planned
+- QR Designer (V2): Firebase not configured (needs service account)
+- QR Designer (V2): Google sign-in button shows but doesn't work
+- QR Designer (V2): Ready for production deployment
+- QR Designer (V2): Database migration to PostgreSQL planned
+- QR Scanner (V1): Working perfectly on Railway
 
 ## 🔧 **Common Commands**
 
@@ -83,14 +93,28 @@ cd /repos/newproj && source venv/bin/activate && python3 -c "from app.database i
 
 ### **Git:**
 ```bash
-# Current branch: enterprisescaler
+# QR Scanner (V1): deployer branch
+git checkout deployer
 git status
-git log --oneline -5
+git push origin deployer
+
+# QR Designer (V2): enterprisescaler branch  
+git checkout enterprisescaler
+git status
 git push origin enterprisescaler
 ```
 
-## 📊 **Project Architecture**
+## 📊 **Dual App Architecture**
 
+### **QR Scanner (V1) - deployer branch:**
+```
+Simple Upload Interface
+├── File Upload
+├── QR Decoding API
+└── Results Display
+```
+
+### **QR Designer (V2) - enterprisescaler branch:**
 ```
 Frontend (React)
 ├── Firebase Auth (Google sign-in)

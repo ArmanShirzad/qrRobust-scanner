@@ -1,131 +1,4 @@
-# 🚀 QR App Development Roadmap
 
-## ✅ **Completed Features**
-- [x] QR Code Designer with templates
-- [x] QR Code Management system
-- [x] User authentication (email/password)
-- [x] Firebase authentication (Google sign-in)
-- [x] QR code generation and styling
-- [x] File upload support (logos, backgrounds)
-- [x] Download functionality
-- [x] Database integration (SQLite/PostgreSQL)
-
-## 🔥 **Current Priority (Next Session)**
-- [ ] **Firebase Project Setup**
-  - Create Firebase project
-  - Configure Google authentication
-  - Add service account key
-  - Test Google sign-in flow
-  - Deploy with Firebase config
-
-## 📋 **Short Term Goals (1-2 weeks)**
-- [ ] **User Profile System**
-  - User profile pages
-  - Avatar upload
-  - Account settings
-  - Subscription management
-
-- [ ] **Analytics Dashboard**
-  - QR scan tracking
-  - Usage statistics
-  - Performance metrics
-  - Export reports
-
-- [ ] **Mobile Responsiveness**
-  - Mobile-first design
-  - Touch-friendly interface
-  - Responsive QR designer
-  - Mobile app (PWA)
-
-## 🎯 **Medium Term Goals (1-2 months)**
-- [ ] **Advanced QR Features**
-  - Bulk QR generation
-  - QR code templates
-  - Custom styling options
-  - Brand customization
-
-- [ ] **Enterprise Features**
-  - Team collaboration
-  - User roles and permissions
-  - API access
-  - White-label options
-
-- [ ] **Performance Optimization**
-  - CDN integration
-  - Image optimization
-  - Caching strategies
-  - Database optimization
-
-## 🚀 **Long Term Goals (3+ months)**
-- [ ] **Mobile App**
-  - React Native app
-  - QR scanner integration
-  - Offline functionality
-  - Push notifications
-
-- [ ] **Advanced Analytics**
-  - Real-time tracking
-  - Geographic data
-  - Device analytics
-  - Custom reports
-
-- [ ] **Integration Features**
-  - Social media integration
-  - Email marketing
-  - CRM integration
-  - Webhook support
-
-## 🛠️ **Technical Debt**
-- [ ] **Code Refactoring**
-  - Component optimization
-  - API endpoint cleanup
-  - Error handling improvement
-  - Testing implementation
-
-- [ ] **Security Enhancements**
-  - Rate limiting
-  - Input validation
-  - Security headers
-  - Audit logging
-
-## 📊 **Deployment & Scaling**
-- [ ] **Production Deployment**
-  - Railway/Render deployment
-  - Domain configuration
-  - SSL certificates
-  - Monitoring setup
-
-- [ ] **Database Migration**
-  - PostgreSQL migration
-  - Data backup strategy
-  - Performance tuning
-  - Scaling preparation
-
-## 🎨 **UI/UX Improvements**
-- [ ] **Design System**
-  - Consistent styling
-  - Component library
-  - Dark mode support
-  - Accessibility improvements
-
-- [ ] **User Experience**
-  - Onboarding flow
-  - Help documentation
-  - Error messages
-  - Loading states
-
-## 💰 **Monetization Features**
-- [ ] **Subscription Tiers**
-  - Free tier limitations
-  - Premium features
-  - Payment integration
-  - Billing management
-
-- [ ] **Usage Limits**
-  - QR code limits
-  - Storage limits
-  - API rate limits
-  - Feature restrictions
 
 ---
 
@@ -137,6 +10,29 @@
 - Database: SQLite (ready for PostgreSQL migration)
 - Frontend: React with Tailwind CSS
 - Backend: FastAPI with SQLAlchemy
+## 🌳 **Git Workflow Management - Dual App Strategy**
+
+### **Current Branch Structure:**
+- **`deployer`** - Version 1 QR Scanner (deployed on Railway)
+  - URL: https://qr-scanner-app-production.up.railway.app/
+  - Purpose: Upload & decode QR codes
+  - Features: Simple QR scanning functionality
+  
+- **`enterprisescaler`** - Version 2 QR Designer (new app)
+  - Purpose: Create & manage QR codes
+  - Features: Advanced design, authentication, management
+  - Status: Ready for deployment
+
+### **Deployment Strategy:**
+- **V1 QR Scanner**: Keep on current Railway project (deployer branch)
+- **V2 QR Designer**: Create new Railway project (enterprisescaler branch)
+
+### **Next Steps:**
+1. Create new Railway project for V2 QR Designer
+2. Deploy enterprisescaler branch to new Railway project
+3. Configure Firebase for V2
+4. Test both apps independently
+5. Update documentation with both URLs
 
 ### **Immediate Next Steps:**
 1. Follow FIREBASE_SETUP.md to configure Firebase
