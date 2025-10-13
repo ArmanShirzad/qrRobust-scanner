@@ -1,77 +1,210 @@
-# QR Code Reader - Portfolio Version
+# 🎨 QR Code Designer V2
 
-[![Python](https://img.shields.io/badge/python-3.8+-blue.svg)](https://python.org)
-[![Flask](https://img.shields.io/badge/flask-2.0+-green.svg)](https://flask.palletsprojects.com/)
-[![OpenCV](https://img.shields.io/badge/opencv-4.0+-red.svg)](https://opencv.org/)
-[![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
-[![Railway](https://img.shields.io/badge/deployed%20on-Railway-0B0D0E.svg)](https://railway.app/)
+A modern FastAPI + React application for creating, designing, and managing QR codes with advanced customization features.
 
-A Flask-based web application for reading QR codes from images and PDFs.
+## 🌟 Features
 
-## Features
-- Upload and decode QR codes from images (PNG, JPG, JPEG, GIF, BMP, TIFF)
-- Batch processing of multiple QR codes
-- PDF QR code extraction
-- WiFi QR code generation
-- RESTful API endpoints
-- Clean, responsive web interface
+- 🎨 **Advanced QR Design**: Custom colors, logos, backgrounds, and templates
+- 🔐 **Firebase Authentication**: Google sign-in integration
+- 📊 **QR Management**: Create, edit, download, and organize QR codes
+- 📱 **Responsive Design**: Beautiful React frontend with Tailwind CSS
+- 🚀 **FastAPI Backend**: High-performance Python API
+- 💾 **Database Integration**: SQLite with PostgreSQL migration support
+- 📈 **Analytics**: Track QR code usage and performance
+- 🔄 **Real-time Preview**: Live preview of QR code designs
 
-## Live Demo
-Visit the deployed version at: [Your Railway App URL]
+## 🚀 Quick Start
 
-## Quick Start
+### Prerequisites
+- Python 3.8+
+- Node.js 16+
+- Firebase project (for authentication)
 
-1. **Clone the repository**
-   ```bash
-   git clone https://github.com/yourusername/qr-reader.git
-   cd qr-reader
-   ```
+### Installation
 
-2. **Install dependencies**
-   ```bash
-   pip install -r requirements.txt
-   ```
-
-3. **Set up environment variables**
-   ```bash
-   cp env.example .env
-   # Edit .env with your configuration
-   ```
-
-4. **Run the application**
-   ```bash
-   python app.py
-   ```
-
-5. **Open your browser**
-   Navigate to `http://localhost:5000`
-
-## API Endpoints
-
-- `POST /api/decode` - Decode QR code from uploaded image
-- `POST /api/batch` - Process multiple QR codes
-- `GET /api/docs` - API documentation
-
-## Technologies Used
-- **Backend**: Flask, Python
-- **QR Processing**: zxing-cpp, qrcode
-- **Image Processing**: PIL (Pillow)
-- **PDF Processing**: PyPDF2
-- **Frontend**: HTML, CSS, JavaScript
-- **Deployment**: Railway
-
-## Project Structure
-```
-├── app.py              # Main Flask application
-├── templates/          # HTML templates
-├── static/            # CSS and JavaScript files
-├── uploads/           # Uploaded files directory
-├── requirements.txt   # Python dependencies
-└── railway.json      # Railway deployment config
+1. **Clone the repository:**
+```bash
+git clone https://github.com/ArmanShirzad/qrRobust-scanner.git
+cd qrRobust-scanner
+git checkout qr-designer-v2
 ```
 
-## Contributing
-This is a portfolio project. For development features, see the `feature/update` branch.
+2. **Backend Setup:**
+```bash
+# Create virtual environment
+python3 -m venv venv
+source venv/bin/activate  # On Windows: venv\Scripts\activate
 
-## License
-MIT License - feel free to use this code for your own projects!
+# Install dependencies
+pip install -r requirements.txt
+
+# Set up environment variables
+cp env.example .env
+# Edit .env with your configuration
+
+# Run database migrations
+alembic upgrade head
+
+# Start backend server
+python -m uvicorn app.main:app --reload --port 8000
+```
+
+3. **Frontend Setup:**
+```bash
+cd frontend
+npm install
+npm start
+```
+
+4. **Access the application:**
+- Frontend: http://localhost:3000
+- Backend API: http://localhost:8000
+- API Docs: http://localhost:8000/docs
+
+## 🔧 Configuration
+
+### Environment Variables
+Create a `.env` file with:
+```env
+# Database
+DATABASE_URL=sqlite:///./qr_reader.db
+
+# JWT Settings
+SECRET_KEY=your-secret-key
+JWT_ACCESS_TOKEN_EXPIRE_MINUTES=30
+
+# Firebase (for authentication)
+FIREBASE_PROJECT_ID=your-project-id
+FIREBASE_PRIVATE_KEY_ID=your-private-key-id
+FIREBASE_PRIVATE_KEY=your-private-key
+FIREBASE_CLIENT_EMAIL=your-client-email
+FIREBASE_CLIENT_ID=your-client-id
+```
+
+### Firebase Setup
+1. Create a Firebase project at [Firebase Console](https://console.firebase.google.com/)
+2. Enable Authentication → Google sign-in
+3. Download service account key
+4. Update environment variables
+5. See [FIREBASE_SETUP.md](FIREBASE_SETUP.md) for detailed instructions
+
+## 🚀 Deployment
+
+### Railway (Recommended)
+[![Deploy on Railway](https://railway.app/button.svg)](https://railway.app/template/your-template-id)
+
+1. **Push your code to GitHub**
+2. **Go to [railway.app](https://railway.app)**
+3. **Sign up/login with GitHub**
+4. **Click "New Project" → "Deploy from GitHub repo"**
+5. **Select your repository and `qr-designer-v2` branch**
+6. **Configure environment variables**
+7. **Deploy!**
+
+### Other Platforms
+- **Render**: See [DEPLOYMENT.md](DEPLOYMENT.md)
+- **Heroku**: See [DEPLOYMENT.md](DEPLOYMENT.md)
+- **Docker**: See [docker-compose.yml](docker-compose.yml)
+
+## 📚 API Documentation
+
+### Authentication Endpoints
+- `POST /api/v1/auth/firebase-verify` - Verify Firebase token
+- `POST /api/v1/auth/refresh` - Refresh JWT token
+
+### QR Designer Endpoints
+- `POST /api/v1/qr-designer/design` - Generate QR code preview
+- `POST /api/v1/qr-designer/design-and-save` - Create and save QR code
+- `GET /api/v1/qr-designer/qr-code/{id}/image` - Get QR code image
+
+### QR Management Endpoints
+- `GET /api/v1/qr-codes/my-codes` - Get user's QR codes
+- `PUT /api/v1/qr-codes/{id}` - Update QR code
+- `DELETE /api/v1/qr-codes/{id}` - Delete QR code
+
+## 🏗️ Project Structure
+
+```
+├── app/                    # FastAPI backend
+│   ├── api/v1/            # API routes
+│   ├── core/              # Configuration
+│   ├── models/            # Database models
+│   ├── schemas/           # Pydantic schemas
+│   ├── services/          # Business logic
+│   └── utils/             # Utilities
+├── frontend/              # React frontend
+│   ├── src/
+│   │   ├── components/    # React components
+│   │   ├── pages/         # Page components
+│   │   ├── contexts/       # React contexts
+│   │   └── services/       # API services
+├── alembic/               # Database migrations
+├── requirements.txt       # Python dependencies
+└── frontend/package.json  # Node.js dependencies
+```
+
+## 🛠️ Technologies Used
+
+### Backend
+- **FastAPI**: Modern Python web framework
+- **SQLAlchemy**: Python ORM
+- **Alembic**: Database migrations
+- **Pydantic**: Data validation
+- **Firebase Admin SDK**: Authentication
+- **QRCode**: QR code generation
+
+### Frontend
+- **React**: JavaScript UI library
+- **Tailwind CSS**: Utility-first CSS framework
+- **Axios**: HTTP client
+- **Firebase SDK**: Authentication
+- **React Router**: Client-side routing
+
+### Database
+- **SQLite**: Development database
+- **PostgreSQL**: Production database (migratable)
+
+## 🧪 Testing
+
+```bash
+# Backend tests
+python -m pytest
+
+# Frontend tests
+cd frontend
+npm test
+```
+
+## 📈 Features Roadmap
+
+- [ ] QR code analytics dashboard
+- [ ] Bulk QR code generation
+- [ ] Custom QR code templates
+- [ ] API rate limiting
+- [ ] User subscription tiers
+- [ ] QR code usage tracking
+
+## 🤝 Contributing
+
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
+
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## 🙏 Acknowledgments
+
+- [FastAPI](https://fastapi.tiangolo.com/) for the web framework
+- [React](https://reactjs.org/) for the frontend
+- [Firebase](https://firebase.google.com/) for authentication
+- [Railway](https://railway.app/) for hosting
+
+---
+
+**Version**: QR Designer V2  
+**Status**: 🚀 Ready for Deployment  
+**Tech Stack**: FastAPI + React + Firebase + PostgreSQL
