@@ -22,6 +22,11 @@ class Settings(BaseSettings):
     postgres_server: Optional[str] = None
     postgres_db: Optional[str] = None
     
+    # Supabase Configuration
+    supabase_url: Optional[str] = None
+    supabase_anon_key: Optional[str] = None
+    supabase_service_role_key: Optional[str] = None
+    
     # Redis Configuration
     redis_url: str = "redis://localhost:6379"
     
@@ -64,6 +69,11 @@ class Settings(BaseSettings):
         """Assemble database URL from components if not provided directly."""
         if isinstance(v, str) and v.startswith("postgresql"):
             return v
+        
+        # Check for Supabase DATABASE_URL first
+        supabase_db_url = os.getenv("DATABASE_URL")
+        if supabase_db_url and supabase_db_url.startswith("postgresql"):
+            return supabase_db_url
         
         # Check for PostgreSQL environment variables
         postgres_user = os.getenv("POSTGRES_USER")
