@@ -1,11 +1,16 @@
-# QR Code Reader - Portfolio Version
+# 🔍 QR Code Scanner V1
 
 A Flask-based web application for reading QR codes from images and PDFs.
+
+## 🌐 Live Demo
+**🚀 [Try the Live App](https://qr-scanner-app-production.up.railway.app/)**
+
+Upload an image containing a QR code to decode its content instantly!
 
 ## 🚀 Features
 
 - 🖼️ **Image Upload**: Support for PNG, JPG, JPEG, GIF, BMP, and TIFF formats
-- 🔍 **QR Code Detection**: Automatically detects and decodes QR codes in images using OpenCV
+- 🔍 **QR Code Detection**: Automatically detects and decodes QR codes using OpenCV
 - 🌐 **Web Interface**: Beautiful, responsive web interface with drag-and-drop support
 - 💻 **Command Line**: Simple CLI tool for quick QR code decoding
 - 🔗 **Smart Detection**: Automatically detects URLs, emails, phone numbers, and WiFi configurations
@@ -14,14 +19,20 @@ A Flask-based web application for reading QR codes from images and PDFs.
 
 ## 📦 Installation
 
-1. Clone or download this repository
-2. Create a virtual environment (recommended):
+1. Clone the repository:
+```bash
+git clone https://github.com/ArmanShirzad/qrRobust-scanner.git
+cd qrRobust-scanner
+git checkout qr-scanner-v1
+```
+
+2. Create a virtual environment:
 ```bash
 python3 -m venv .venv
 source .venv/bin/activate  # On Windows: .venv\Scripts\activate
 ```
 
-3. Install the required dependencies:
+3. Install dependencies:
 ```bash
 pip install -r requirements.txt
 ```
@@ -29,8 +40,7 @@ pip install -r requirements.txt
 ## 🎯 Usage
 
 ### Web Application
-
-1. Start the web server:
+1. Start the server:
 ```bash
 python app.py
 ```
@@ -44,19 +54,11 @@ python app.py
 4. View the decoded content on the results page
 
 ### Command Line Interface
-
 ```bash
 python cli_qr_reader.py <image_path>
 ```
 
-Examples:
-```bash
-python cli_qr_reader.py qr_code.png
-python cli_qr_reader.py /path/to/image.jpg
-```
-
 ### API Usage
-
 Send a POST request to `/decode_base64` with a base64-encoded image:
 
 ```bash
@@ -65,20 +67,17 @@ curl -X POST http://localhost:5000/decode_base64 \
   -d '{"image": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAA..."}'
 ```
 
-Response:
-```json
-{
-  "decoded_data": ["https://example.com", "Hello World"]
-}
-```
+## 🚀 Deploy to Railway
 
-## 🖼️ Supported Image Formats
+[![Deploy on Railway](https://railway.app/button.svg)](https://railway.app/template/your-template-id)
 
-- PNG
-- JPG/JPEG
-- GIF
-- BMP
-- TIFF
+### Manual Deployment:
+1. **Push your code to GitHub**
+2. **Go to [railway.app](https://railway.app)**
+3. **Sign up/login with GitHub**
+4. **Click "New Project" → "Deploy from GitHub repo"**
+5. **Select your repository and `qr-scanner-v1` branch**
+6. **Railway will auto-detect Python and deploy!**
 
 ## 🔧 Dependencies
 
@@ -88,8 +87,6 @@ Response:
 - NumPy: Numerical computing
 
 ## 🧪 Testing Installation
-
-Run the test script to verify everything is working:
 
 ```bash
 python test_installation.py
@@ -104,58 +101,7 @@ The application includes comprehensive error handling for:
 - Network errors (API)
 - File size limits (16MB max)
 
-## 🚀 Deployment
-
-### Railway (Recommended - Free)
-
-Railway offers a generous free tier perfect for this QR code reader app.
-
-#### Quick Deploy to Railway:
-
-1. **Push your code to GitHub:**
-```bash
-git add .
-git commit -m "Add Railway deployment support"
-git push origin main
-```
-
-2. **Deploy to Railway:**
-   - Go to [railway.app](https://railway.app)
-   - Sign up/login with GitHub
-   - Click "New Project" → "Deploy from GitHub repo"
-   - Select your repository
-   - Railway will auto-detect Python and deploy!
-
-3. **Your app will be live at:** `https://your-app-name.railway.app`
-
-#### Railway Features:
-- 🆓 **Free $5/month credit** (enough for small apps)
-- 🔒 **Automatic HTTPS**
-- 🔧 **Environment variables support**
-- 🚀 **Auto-deploy on git push**
-- 📊 **Built-in monitoring**
-
-#### Optional Environment Variables:
-Set these in your Railway dashboard for production:
-- `FLASK_ENV=production` (for production mode)
-- `SECRET_KEY=your-secret-key` (for Flask sessions)
-
-### Other Deployment Options
-
-#### Heroku
-```bash
-# Run the deployment script
-bash deploy.sh
-```
-
-#### Local Development
-```bash
-python app.py
-```
-
 ## 🤝 Contributing
-
-Contributions are welcome! Please feel free to submit a Pull Request.
 
 1. Fork the repository
 2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
@@ -173,11 +119,8 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - [Flask](https://flask.palletsprojects.com/) for the web framework
 - [Railway](https://railway.app/) for hosting
 
-## 📊 Repository Stats
+---
 
-![GitHub stars](https://img.shields.io/github/stars/yourusername/qr-reader?style=social)
-![GitHub forks](https://img.shields.io/github/forks/yourusername/qr-reader?style=social)
-![GitHub issues](https://img.shields.io/github/issues/yourusername/qr-reader)
-![GitHub license](https://img.shields.io/github/license/yourusername/qr-reader)
-![Python](https://img.shields.io/badge/python-3.8+-blue.svg)
-![Flask](https://img.shields.io/badge/flask-2.0+-green.svg)
+**Version**: QR Scanner V1  
+**Status**: ✅ Live and Deployed  
+**URL**: https://qr-scanner-app-production.up.railway.app/
