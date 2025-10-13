@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { 
   QrCode, 
@@ -25,7 +25,7 @@ const QRManagement = () => {
   const [loadingImages, setLoadingImages] = useState({});
   const isRequesting = useRef(false);
 
-  useEffect(() => {
+  const fetchQRCodesCallback = useCallback(() => {
     if (!isRequesting.current) {
       isRequesting.current = true;
       fetchQRCodes({
@@ -37,7 +37,11 @@ const QRManagement = () => {
         isRequesting.current = false;
       });
     }
-  }, [searchTerm, filterType, sortBy, sortOrder]);
+  }, [fetchQRCodes, searchTerm, filterType, sortBy, sortOrder]);
+
+  useEffect(() => {
+    fetchQRCodesCallback();
+  }, [fetchQRCodesCallback]);
 
   const handleDelete = async (id) => {
     if (window.confirm('Are you sure you want to delete this QR code?')) {

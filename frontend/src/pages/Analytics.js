@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { 
   BarChart, 
   Bar, 
@@ -22,7 +22,7 @@ const Analytics = () => {
   const [loading, setLoading] = useState(true);
   const [timeRange, setTimeRange] = useState(30);
 
-  const fetchAnalytics = async () => {
+  const fetchAnalytics = useCallback(async () => {
     try {
       setLoading(true);
       const response = await analyticsAPI.getDashboardStats(timeRange);
@@ -33,7 +33,7 @@ const Analytics = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [timeRange]);
 
   const handleExportData = async () => {
     try {
@@ -63,7 +63,7 @@ const Analytics = () => {
 
   useEffect(() => {
     fetchAnalytics();
-  }, [timeRange]);
+  }, [timeRange, fetchAnalytics]);
 
   const COLORS = ['#3B82F6', '#10B981', '#F59E0B', '#EF4444', '#8B5CF6'];
 

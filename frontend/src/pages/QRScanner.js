@@ -54,23 +54,6 @@ const QRScanner = () => {
     }
   };
 
-  const handleBase64Scan = async (base64Data) => {
-    try {
-      setLoading(true);
-      setError(null);
-      
-      const response = await qrAPI.decodeBase64({ data: base64Data });
-      setScanResult(response.data);
-      toast.success('QR code scanned successfully!');
-    } catch (error) {
-      console.error('Failed to scan QR code:', error);
-      setError(error.response?.data?.detail || 'Failed to scan QR code');
-      toast.error('Failed to scan QR code');
-    } finally {
-      setLoading(false);
-    }
-  };
-
   const fileDropzone = useDropzone({
     accept: {
       'image/*': ['.png', '.jpg', '.jpeg', '.gif', '.bmp']
