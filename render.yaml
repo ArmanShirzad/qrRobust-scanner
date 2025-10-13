@@ -33,9 +33,9 @@ services:
       - key: FIREBASE_CLIENT_ID
         sync: false
 
-static_sites:
   # Frontend React service
-  - name: qr-designer-frontend
+  - type: static_site
+    name: qr-designer-frontend
     buildCommand: cd frontend && npm install && npm run build
     staticPublishPath: frontend/build
     envVars:
