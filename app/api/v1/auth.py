@@ -6,10 +6,11 @@ from datetime import timedelta
 
 from app.database import get_db
 from app.models import User
+from app.services.firebase_service import firebase_service
 from app.schemas.auth import (
-    UserCreate, UserLogin, UserResponse, Token,
-    PasswordReset, PasswordResetConfirm, EmailVerification, ChangePassword,
-    RefreshRequest
+    FirebaseTokenRequest, FirebaseUserResponse, UserCreate, UserLogin, 
+    UserResponse, Token, PasswordReset, PasswordResetConfirm, 
+    EmailVerification, ChangePassword, RefreshRequest
 )
 from app.utils.auth import (
     verify_password, get_password_hash, create_access_token, 
@@ -173,3 +174,73 @@ async def change_password(
     db.commit()
     
     return {"message": "Password changed successfully"}
+
+
+@router.post("/firebase-verify", response_model=dict)
+async def verify_firebase_token(
+    token_request: FirebaseTokenRequest,
+    db: Session = Depends(get_db)
+):
+    """Verify Firebase ID token and create/find user."""
+    try:
+        # Verify Firebase token
+        firebase_result = firebase_service.verify_id_token(token_request.idToken)
+        
+        if not firebase_result['success']:
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail=firebase_result['error']
+            )
+        
+        # Extract user info from Firebase token
+        firebase_uid = firebase_result['uid']
+        firebase_email = firebase_result['email']
+        firebase_name = firebase_result.get('name', '')
+        firebase_picture = firebase_result.get('picture', '')
+        
+        # Check if user exists in our database
+        user = db.query(User).filter(User.email == firebase_email).first()
+        
+        if not user:
+            # Create new user
+            user = User(
+                email=firebase_email,
+                password_hash="firebase_user",  # Placeholder for Firebase users
+                tier="free",
+                is_active=True,
+                is_verified=True  # Firebase users are considered verified
+            )
+            db.add(user)
+            db.commit()
+            db.refresh(user)
+        
+        # Create JWT tokens for our app
+        access_token_expires = timedelta(minutes=settings.jwt_access_token_expire_minutes)
+        access_token = create_access_token(
+            data={"sub": str(user.id)}, expires_delta=access_token_expires
+        )
+        refresh_token = create_refresh_token(data={"sub": str(user.id)})
+        
+        return {
+            "user": {
+                "id": user.id,
+                "email": user.email,
+                "tier": user.tier,
+                "is_active": user.is_active,
+                "is_verified": user.is_verified,
+                "firebase_uid": firebase_uid,
+                "display_name": firebase_name,
+                "photo_url": firebase_picture
+            },
+            "access_token": access_token,
+            "refresh_token": refresh_token,
+            "token_type": "bearer"
+        }
+        
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Firebase authentication failed: {str(e)}"
+        )

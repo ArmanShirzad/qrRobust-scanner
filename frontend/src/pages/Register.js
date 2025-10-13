@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { Eye, EyeOff, Mail, Lock } from 'lucide-react';
+import FirebaseLogin from '../components/FirebaseLogin';
 
 const Register = () => {
   const [formData, setFormData] = useState({
@@ -54,6 +55,14 @@ const Register = () => {
     }
   };
 
+  const handleFirebaseSuccess = (user) => {
+    navigate('/dashboard');
+  };
+
+  const handleFirebaseError = (error) => {
+    console.error('Firebase registration error:', error);
+  };
+
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-md w-full space-y-8">
@@ -70,6 +79,24 @@ const Register = () => {
               sign in to your existing account
             </Link>
           </p>
+        </div>
+        
+        {/* Firebase Google Sign In */}
+        <div className="mt-6">
+          <FirebaseLogin 
+            onSuccess={handleFirebaseSuccess}
+            onError={handleFirebaseError}
+          />
+        </div>
+
+        {/* Divider */}
+        <div className="relative">
+          <div className="absolute inset-0 flex items-center">
+            <div className="w-full border-t border-gray-300" />
+          </div>
+          <div className="relative flex justify-center text-sm">
+            <span className="px-2 bg-gray-50 text-gray-500">Or continue with email</span>
+          </div>
         </div>
         
         <form className="mt-8 space-y-6" onSubmit={handleSubmit}>

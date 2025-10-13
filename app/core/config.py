@@ -65,8 +65,16 @@ class Settings(BaseSettings):
         if isinstance(v, str) and v.startswith("postgresql"):
             return v
         
-        # For now, just return the default SQLite URL
-        # TODO: Implement proper PostgreSQL URL assembly when needed
+        # Check for PostgreSQL environment variables
+        postgres_user = os.getenv("POSTGRES_USER")
+        postgres_password = os.getenv("POSTGRES_PASSWORD")
+        postgres_server = os.getenv("POSTGRES_SERVER", "localhost")
+        postgres_db = os.getenv("POSTGRES_DB", "qr_app")
+        
+        if postgres_user and postgres_password:
+            return f"postgresql://{postgres_user}:{postgres_password}@{postgres_server}:5432/{postgres_db}"
+        
+        # Fallback to SQLite
         return v or "sqlite:///./qr_reader.db"
     
     model_config = {"env_file": ".env", "case_sensitive": False}

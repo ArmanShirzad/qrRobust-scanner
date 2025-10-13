@@ -67,6 +67,20 @@ class ChangePassword(BaseModel):
     new_password: str
 
 
+class FirebaseTokenRequest(BaseModel):
+    """Schema for Firebase token verification request."""
+    idToken: str
+
+
+class FirebaseUserResponse(BaseModel):
+    """Schema for Firebase user response."""
+    uid: str
+    email: str
+    display_name: Optional[str] = None
+    photo_url: Optional[str] = None
+    email_verified: bool = False
+
+
 # Request bodies
 class RefreshRequest(BaseModel):
     """Schema for refresh token request body."""

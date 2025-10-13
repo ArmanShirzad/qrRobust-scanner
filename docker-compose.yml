@@ -1,120 +1,52 @@
+# Docker Compose for PostgreSQL deployment
 version: '3.8'
 
 services:
   # PostgreSQL Database
-  postgres:
-    image: postgres:15-alpine
+  db:
+    image: postgres:15
     environment:
-      POSTGRES_DB: qr_reader_db
-      POSTGRES_USER: qr_reader_user
-      POSTGRES_PASSWORD: qr_reader_password
+      POSTGRES_DB: qr_app
+      POSTGRES_USER: qr_user
+      POSTGRES_PASSWORD: qr_password
     volumes:
       - postgres_data:/var/lib/postgresql/data
       - ./init.sql:/docker-entrypoint-initdb.d/init.sql
     ports:
       - "5432:5432"
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U qr_reader_user -d qr_reader_db"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
+    restart: unless-stopped
 
-  # Redis Cache
+  # Redis for caching
   redis:
     image: redis:7-alpine
     ports:
       - "6379:6379"
-    volumes:
-      - redis_data:/data
-    healthcheck:
-      test: ["CMD", "redis-cli", "ping"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
+    restart: unless-stopped
 
   # Backend API
   backend:
     build: .
     environment:
-      - DATABASE_URL=postgresql://qr_reader_user:qr_reader_password@postgres:5432/qr_reader_db
-      - REDIS_URL=redis://redis:6379
-      - JWT_SECRET_KEY=your-super-secret-jwt-key-change-in-production
-      - JWT_ALGORITHM=HS256
-      - JWT_ACCESS_TOKEN_EXPIRE_MINUTES=15
-      - JWT_REFRESH_TOKEN_EXPIRE_DAYS=7
-      - STRIPE_SECRET_KEY=sk_test_your_stripe_secret_key
-      - STRIPE_WEBHOOK_SECRET=whsec_your_webhook_secret
-      - EMAIL_HOST=smtp.gmail.com
-      - EMAIL_PORT=587
-      - EMAIL_USERNAME=your-email@gmail.com
-      - EMAIL_PASSWORD=your-app-password
-      - UPLOAD_FOLDER=/app/uploads
-      - MAX_FILE_SIZE=10485760
-      - ALLOWED_EXTENSIONS=png,jpg,jpeg,gif,bmp
-      - CORS_ORIGINS=http://localhost:3000,http://localhost:80
-      - CORS_ALLOW_CREDENTIALS=true
-      - CORS_ALLOW_METHODS=GET,POST,PUT,DELETE,OPTIONS
-      - CORS_ALLOW_HEADERS=*
+      DATABASE_URL: postgresql://qr_user:qr_password@db:5432/qr_app
+      REDIS_URL: redis://redis:6379/0
+      JWT_SECRET_KEY: your-super-secret-jwt-key
     ports:
       - "8000:8000"
+    depends_on:
+      - db
+      - redis
+    restart: unless-stopped
     volumes:
       - ./uploads:/app/uploads
-      - ./static:/app/static
-      - ./templates:/app/templates
-    depends_on:
-      postgres:
-        condition: service_healthy
-      redis:
-        condition: service_healthy
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
-    restart: unless-stopped
 
-  # Frontend React App
+  # Frontend (if serving from backend)
   frontend:
-    build:
-      context: ./frontend
-      dockerfile: Dockerfile
+    build: ./frontend
     ports:
-      - "80:80"
+      - "3000:3000"
     depends_on:
       - backend
     restart: unless-stopped
 
-  # Celery Worker for Background Tasks
-  celery-worker:
-    build: .
-    command: celery -A app.celery worker --loglevel=info
-    environment:
-      - DATABASE_URL=postgresql://qr_reader_user:qr_reader_password@postgres:5432/qr_reader_db
-      - REDIS_URL=redis://redis:6379
-      - JWT_SECRET_KEY=your-super-secret-jwt-key-change-in-production
-    volumes:
-      - ./uploads:/app/uploads
-    depends_on:
-      postgres:
-        condition: service_healthy
-      redis:
-        condition: service_healthy
-    restart: unless-stopped
-
-  # Celery Beat for Scheduled Tasks
-  celery-beat:
-    build: .
-    command: celery -A app.celery beat --loglevel=info
-    environment:
-      - DATABASE_URL=postgresql://qr_reader_user:qr_reader_password@postgres:5432/qr_reader_db
-      - REDIS_URL=redis://redis:6379
-    depends_on:
-      postgres:
-        condition: service_healthy
-      redis:
-        condition: service_healthy
-    restart: unless-stopped
-
 volumes:
   postgres_data:
-  redis_data:
