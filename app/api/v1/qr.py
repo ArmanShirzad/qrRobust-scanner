@@ -21,7 +21,7 @@ router = APIRouter()
 def allowed_file(filename: str) -> bool:
     """Check if the uploaded file has an allowed extension."""
     return '.' in filename and \
-           filename.rsplit('.', 1)[1].lower() in settings.allowed_extensions
+           filename.rsplit('.', 1)[1].lower() in settings.allowed_extensions.split(',')
 
 
 def secure_filename(filename: str) -> str:

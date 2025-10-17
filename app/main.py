@@ -20,10 +20,10 @@ app = FastAPI(
 # Add CORS middleware
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=settings.cors_origins,
+    allow_origins=settings.cors_origins.split(',') if settings.cors_origins != "*" else ["*"],
     allow_credentials=settings.cors_allow_credentials,
-    allow_methods=settings.cors_allow_methods,
-    allow_headers=settings.cors_allow_headers,
+    allow_methods=settings.cors_allow_methods.split(',') if settings.cors_allow_methods != "*" else ["*"],
+    allow_headers=settings.cors_allow_headers.split(',') if settings.cors_allow_headers != "*" else ["*"],
 )
 
 # Add rate limiting middleware

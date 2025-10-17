@@ -14,6 +14,7 @@ class Settings(BaseSettings):
     app_version: str = "2.0.0"
     debug: bool = False
     secret_key: str = "dev-key-change-in-production"
+    environment: str = "development"
     
     # Database Configuration
     database_url: str = "sqlite:///./qr_reader.db"
@@ -51,17 +52,20 @@ class Settings(BaseSettings):
     # File Upload Configuration
     upload_folder: str = "uploads"
     max_file_size: int = 16 * 1024 * 1024  # 16MB
-    allowed_extensions: set = {"png", "jpg", "jpeg", "gif", "bmp", "tiff"}
+    allowed_extensions: str = "png,jpg,jpeg,gif,bmp,tiff"
     
     # Rate Limiting Configuration
     rate_limit_per_minute: int = 60
     rate_limit_per_hour: int = 1000
     
     # CORS Configuration
-    cors_origins: list = ["*"]
+    cors_origins: str = "*"
     cors_allow_credentials: bool = True
-    cors_allow_methods: list = ["*"]
-    cors_allow_headers: list = ["*"]
+    cors_allow_methods: str = "*"
+    cors_allow_headers: str = "*"
+    
+    # Frontend Configuration
+    react_app_api_url: str = "http://localhost:8000/api/v1"
     
     @field_validator("database_url", mode="before")
     @classmethod
