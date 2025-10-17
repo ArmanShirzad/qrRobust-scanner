@@ -23,7 +23,7 @@ Visit the deployed version at: [Your Railway App URL]
 
 1. **Clone the repository**
    ```bash
-   git clone https://github.com/armanshirzad/qr-reader.git
+   git clone https://github.com/armanshirzad/qr-reader.git](https://github.com/ArmanShirzad/qrRobust-scanner.git
    cd qr-reader
    ```
 
