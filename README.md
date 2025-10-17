@@ -1,24 +1,32 @@
-# QR Code Designer V2
+# QR Code Reader Premium Platform
 
-A modern FastAPI + React application for creating, designing, and managing QR codes with advanced customization features.
+A modern full-stack application for QR code scanning, generation, analytics, and management with advanced customization features.
+
+[![CI/CD Pipeline](https://github.com/ArmanShirzad/qrRobust-scanner/workflows/CI/CD%20Pipeline/badge.svg)](https://github.com/ArmanShirzad/qrRobust-scanner/actions)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Python 3.11+](https://img.shields.io/badge/python-3.11+-blue.svg)](https://www.python.org/downloads/)
+[![React 18](https://img.shields.io/badge/React-18-blue.svg)](https://reactjs.org/)
 
 ## Features
 
-- **Advanced QR Design**: Custom colors, logos, backgrounds, and templates
-- **Firebase Authentication**: Google sign-in integration
-- **QR Management**: Create, edit, download, and organize QR codes
-- **Responsive Design**: Beautiful React frontend with Tailwind CSS
-- **FastAPI Backend**: High-performance Python API
-- **Database Integration**: SQLite with PostgreSQL migration support
-- **Analytics**: Track QR code usage and performance
-- **Real-time Preview**: Live preview of QR code designs
+- **🔍 QR Code Scanning**: Multi-engine detection with zxing-cpp and OpenCV
+- **🎨 QR Code Generation**: Custom colors, logos, backgrounds, and templates
+- **📊 Analytics Dashboard**: Track scans, locations, devices, and performance
+- **🔐 Authentication**: JWT-based auth with Firebase integration
+- **📱 Responsive Design**: Beautiful React frontend with Tailwind CSS
+- **⚡ FastAPI Backend**: High-performance Python API with async support
+- **🗄️ Database Integration**: PostgreSQL with SQLAlchemy ORM
+- **🚀 Real-time Features**: Live preview and WebSocket support
+- **🔒 Security**: Rate limiting, CORS, and security headers
+- **📈 API Access**: Comprehensive REST API with documentation
 
-## Quick Start
+## Run Locally
 
 ### Prerequisites
-- Python 3.8+
-- Node.js 16+
-- Firebase project (for authentication)
+- Python 3.11+
+- Node.js 18+
+- PostgreSQL (for production)
+- Redis (optional, for caching)
 
 ### Installation
 
@@ -29,7 +37,7 @@ cd qrRobust-scanner
 git checkout qr-designer-v2
 ```
 
-2. **Backend Setup:**
+2. **Set up Python environment:**
 ```bash
 # Create virtual environment
 python3 -m venv venv
@@ -38,28 +46,73 @@ source venv/bin/activate  # On Windows: venv\Scripts\activate
 # Install dependencies
 pip install -r requirements.txt
 
-# Set up environment variables
-cp env.example .env
-# Edit .env with your configuration
+# Install development dependencies
+pip install -e ".[dev]"
 
-# Run database migrations
-alembic upgrade head
-
-# Start backend server
-python -m uvicorn app.main:app --reload --port 8000
+# Set up pre-commit hooks
+pre-commit install
 ```
 
-3. **Frontend Setup:**
+3. **Set up environment variables:**
+```bash
+cp .env.example .env
+# Edit .env with your configuration
+```
+
+4. **Set up the database:**
+```bash
+# Run database migrations
+alembic upgrade head
+```
+
+5. **Set up the frontend:**
 ```bash
 cd frontend
 npm install
+```
+
+6. **Start the development servers:**
+```bash
+# Terminal 1: Backend
+python -m uvicorn app.main:app --reload --port 8000
+
+# Terminal 2: Frontend
+cd frontend
 npm start
 ```
 
-4. **Access the application:**
+7. **Access the application:**
 - Frontend: http://localhost:3000
 - Backend API: http://localhost:8000
 - API Docs: http://localhost:8000/docs
+- ReDoc: http://localhost:8000/redoc
+
+### Development Commands
+
+```bash
+# Run tests
+pytest
+
+# Run tests with coverage
+pytest --cov=app --cov-report=html
+
+# Format code
+black app/
+isort app/
+
+# Lint code
+flake8 app/
+mypy app/
+
+# Frontend tests
+cd frontend && npm test
+
+# Frontend linting
+cd frontend && npm run lint
+
+# Build frontend
+cd frontend && npm run build
+```
 
 ## Configuration
 
@@ -88,9 +141,10 @@ FIREBASE_CLIENT_ID=your-client-id
 4. Update environment variables
 5. See [FIREBASE_SETUP.md](FIREBASE_SETUP.md) for detailed instructions
 
-## Deployment
+## Deploy
 
-### Vercel + Supabase (Recommended - Truly Free!)
+### Vercel + Supabase (Recommended)
+
 [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/ArmanShirzad/qrRobust-scanner/tree/qr-designer-v2)
 
 **Why Vercel + Supabase?**
@@ -105,16 +159,21 @@ FIREBASE_CLIENT_ID=your-client-id
 3. **Configure environment variables**
 4. **See [VERCEL_SUPABASE_DEPLOYMENT.md](VERCEL_SUPABASE_DEPLOYMENT.md) for detailed instructions**
 
-### Railway (Alternative)
-[![Deploy on Railway](https://railway.app/button.svg)](https://railway.app/new/template?template=https://github.com/ArmanShirzad/qrRobust-scanner/tree/qr-designer-v2)
+### Docker Deployment
 
-### Render (Alternative)
-[![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy)
+```bash
+# Build and run with Docker Compose
+docker-compose up --build
+
+# Production deployment
+docker-compose -f docker-compose.prod.yml up -d
+```
 
 ### Other Platforms
-- **Render**: See [DEPLOYMENT.md](DEPLOYMENT.md)
+
+- **Railway**: [![Deploy on Railway](https://railway.app/button.svg)](https://railway.app/new/template?template=https://github.com/ArmanShirzad/qrRobust-scanner/tree/qr-designer-v2)
+- **Render**: [![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy)
 - **Heroku**: See [DEPLOYMENT.md](DEPLOYMENT.md)
-- **Docker**: See [docker-compose.yml](docker-compose.yml)
 
 ## API Documentation
 

@@ -1,0 +1,21 @@
+# Code Owners
+
+# Global owners
+* @ArmanShirzad
+
+# Backend code
+/app/ @ArmanShirzad
+/requirements.txt @ArmanShirzad
+/alembic/ @ArmanShirzad
+
+# Frontend code
+/frontend/ @ArmanShirzad
+
+# Documentation
+*.md @ArmanShirzad
+/docs/ @ArmanShirzad
+
+# Configuration files
+/.github/ @ArmanShirzad
+/docker-compose*.yml @ArmanShirzad
+/Dockerfile @ArmanShirzad

@@ -1,59 +1,131 @@
-# Contributing to QR Code Reader App
+# Contributing to QR Code Reader Premium
 
-Thank you for your interest in contributing to the QR Code Reader App! This document provides guidelines for contributing to this project.
+Thank you for your interest in contributing to QR Code Reader Premium! This document provides guidelines for contributing to the project.
 
-## How to Contribute
+## Getting Started
 
-### Reporting Bugs
+### Prerequisites
 
-Before creating bug reports, please check existing issues as you might find out that you don't need to create one. When you are creating a bug report, please include as many details as possible:
+- Python 3.11+
+- Node.js 18+
+- PostgreSQL (for production)
+- Redis (optional, for caching)
 
-- Use a clear and descriptive title
-- Describe the exact steps to reproduce the problem
-- Provide specific examples to demonstrate the steps
-- Describe the behavior you observed after following the steps
-- Explain which behavior you expected to see instead and why
-- Include screenshots and animated GIFs if possible
+### Development Setup
 
-### Suggesting Enhancements
+1. **Fork and clone the repository**
+   ```bash
+   git clone https://github.com/your-username/qrRobust-scanner.git
+   cd qrRobust-scanner
+   ```
 
-Enhancement suggestions are tracked as GitHub issues. When creating an enhancement suggestion, please include:
+2. **Set up the backend**
+   ```bash
+   python -m venv venv
+   source venv/bin/activate  # On Windows: venv\Scripts\activate
+   pip install -r requirements.txt
+   ```
 
-- Use a clear and descriptive title
-- Provide a step-by-step description of the suggested enhancement
-- Provide specific examples to demonstrate the steps
-- Describe the current behavior and explain which behavior you expected to see instead
-- Explain why this enhancement would be useful
+3. **Set up the frontend**
+   ```bash
+   cd frontend
+   npm install
+   ```
 
-### Pull Requests
+4. **Set up environment variables**
+   ```bash
+   cp .env.example .env
+   # Edit .env with your configuration
+   ```
 
-- Do not include issue numbers in the PR title
-- Include screenshots and animated GIFs in your pull request whenever possible
-- Follow the Python style guide (PEP 8)
-- Include thoughtfully-worded, well-structured tests
-- Document new code based on the Documentation Styleguide
-- End all files with a newline
+5. **Run the development servers**
+   ```bash
+   # Terminal 1: Backend
+   python -m uvicorn app.main:app --reload --port 8000
+   
+   # Terminal 2: Frontend
+   cd frontend
+   npm start
+   ```
 
-## Development Setup
+## Contributing Guidelines
 
-1. Fork the repository
-2. Clone your fork: `git clone https://github.com/yourusername/qrRobust-scanner.git`
-3. Create a branch: `git checkout -b feature/amazing-feature`
-4. Install dependencies: `pip install -r requirements.txt`
-5. Make your changes
-6. Run tests: `python test_installation.py`
-7. Commit your changes: `git commit -m 'Add amazing feature'`
-8. Push to the branch: `git push origin feature/amazing-feature`
-9. Open a Pull Request
+### Code Style
 
-## Style Guidelines
+- **Python**: Follow PEP 8, use Black for formatting
+- **JavaScript/React**: Use ESLint and Prettier
+- **Commit messages**: Use conventional commits format
 
-- Follow PEP 8 for Python code
-- Use meaningful variable and function names
-- Add comments for complex logic
-- Write tests for new functionality
-- Update documentation as needed
+### Pull Request Process
+
+1. **Create a feature branch**
+   ```bash
+   git checkout -b feature/your-feature-name
+   ```
+
+2. **Make your changes**
+   - Write tests for new functionality
+   - Update documentation if needed
+   - Ensure all tests pass
+
+3. **Commit your changes**
+   ```bash
+   git commit -m "feat: add new QR code generation feature"
+   ```
+
+4. **Push to your fork**
+   ```bash
+   git push origin feature/your-feature-name
+   ```
+
+5. **Create a Pull Request**
+   - Provide a clear description
+   - Link any related issues
+   - Request review from maintainers
+
+### Testing
+
+- **Backend**: Run `pytest` in the root directory
+- **Frontend**: Run `npm test` in the frontend directory
+- **Integration**: Ensure both services work together
+
+### Documentation
+
+- Update README.md for new features
+- Add docstrings to Python functions
+- Include JSDoc comments for JavaScript functions
+- Update API documentation
+
+## Issue Guidelines
+
+### Bug Reports
+
+When reporting bugs, please include:
+- Clear description of the issue
+- Steps to reproduce
+- Expected vs actual behavior
+- Environment details (OS, Python/Node versions)
+- Screenshots if applicable
+
+### Feature Requests
+
+For feature requests, please include:
+- Clear description of the feature
+- Use case and motivation
+- Proposed implementation approach
+- Any design mockups or examples
+
+## Code of Conduct
+
+- Be respectful and inclusive
+- Welcome newcomers and help them learn
+- Focus on constructive feedback
+- Respect different opinions and approaches
+
+## License
+
+By contributing, you agree that your contributions will be licensed under the MIT License.
 
 ## Questions?
 
-If you have any questions, please open an issue or contact the maintainers.
+Feel free to open an issue or reach out to the maintainers if you have any questions!
