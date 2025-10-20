@@ -17,7 +17,7 @@ A Flask-based web application for reading QR codes from images and PDFs.
 - Clean, responsive web interface
 
 ## Live Demo
-Visit the deployed version at: [Your Railway App URL]
+Visit the deployed version at: https://qr-scanner-app-production.up.railway.app/
 
 ## Quick Start
 
