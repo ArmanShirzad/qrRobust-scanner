@@ -2,15 +2,10 @@
 
 A Flask-based web application for reading QR codes from images and PDFs.
 
-## Live Demo
-**[Try the Live App](https://qr-scanner-app-production.up.railway.app/)**
-
-Upload an image containing a QR code to decode its content instantly!
-
 ## Features
 
 - **Image Upload**: Support for PNG, JPG, JPEG, GIF, BMP, and TIFF formats
-- **QR Code Detection**: Automatically detects and decodes QR codes using OpenCV
+- **QR Code Detection**: Automatically detects and decodes QR codes
 - **Web Interface**: Beautiful, responsive web interface with drag-and-drop support
 - **Command Line**: Simple CLI tool for quick QR code decoding
 - **Smart Detection**: Automatically detects URLs, emails, phone numbers, and WiFi configurations
@@ -23,7 +18,6 @@ Upload an image containing a QR code to decode its content instantly!
 ```bash
 git clone https://github.com/ArmanShirzad/qrRobust-scanner.git
 cd qrRobust-scanner
-git checkout qr-scanner-v1
 ```
 
 2. Create a virtual environment:
@@ -67,23 +61,34 @@ curl -X POST http://localhost:5000/decode_base64 \
   -d '{"image": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAA..."}'
 ```
 
-## Deploy to Railway
+## Deploy to Heroku
 
-[![Deploy on Railway](https://railway.app/button.svg)](https://railway.app/new/template?template=https://github.com/ArmanShirzad/qrRobust-scanner/tree/qr-scanner-v1)
+1. **Install Heroku CLI** and login:
+   ```bash
+   heroku login
+   ```
 
-### Manual Deployment:
-1. **Push your code to GitHub**
-2. **Go to [railway.app](https://railway.app)**
-3. **Sign up/login with GitHub**
-4. **Click "New Project" → "Deploy from GitHub repo"**
-5. **Select your repository and `qr-scanner-v1` branch**
-6. **Railway will auto-detect Python and deploy!**
+2. **Create a new Heroku app**:
+   ```bash
+   heroku create your-app-name
+   ```
+
+3. **Add required buildpacks**:
+   ```bash
+   heroku buildpacks:add --index 1 heroku-community/apt
+   heroku buildpacks:add --index 2 heroku/python
+   ```
+
+4. **Deploy**:
+   ```bash
+   git push heroku main
+   ```
 
 ## Dependencies
 
 - Flask: Web framework
 - Pillow: Image processing
-- OpenCV (contrib): Computer vision with QR code detection
+- Pyzbar: QR code decoding (requires libzbar0)
 - NumPy: Numerical computing
 
 ## Testing Installation
@@ -91,15 +96,6 @@ curl -X POST http://localhost:5000/decode_base64 \
 ```bash
 python test_installation.py
 ```
-
-## Error Handling
-
-The application includes comprehensive error handling for:
-- Invalid file formats
-- Corrupted images
-- Missing QR codes
-- Network errors (API)
-- File size limits (16MB max)
 
 ## Contributing
 
@@ -115,12 +111,5 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## Acknowledgments
 
-- [OpenCV](https://opencv.org/) for QR code detection
 - [Flask](https://flask.palletsprojects.com/) for the web framework
-- [Railway](https://railway.app/) for hosting
-
----
-
-**Version**: QR Scanner V1  
-**Status**: Live and Deployed  
-**URL**: https://qr-scanner-app-production.up.railway.app/
+- [Pyzbar](https://github.com/NaturalHistoryMuseum/pyzbar) for QR code decoding
