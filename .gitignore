@@ -205,10 +205,6 @@ wifi_*.jpeg
 # Production configuration (contains secrets)
 production_config.py
 
-# Heroku
-Procfile
-runtime.txt
-
 # Logs
 *.log
 
