@@ -16,10 +16,17 @@ def test_imports():
         return False
     
     try:
-        import cv2
-        print("✅ OpenCV imported successfully")
+        from pyzbar import pyzbar
+        print("✅ pyzbar imported successfully")
     except ImportError:
-        print("❌ OpenCV not found. Run: pip install opencv-python")
+        print("❌ pyzbar not found. Run: pip install pyzbar")
+        return False
+
+    try:
+        import zxingcpp
+        print("✅ zxing-cpp imported successfully")
+    except ImportError:
+        print("❌ zxing-cpp not found. Run: pip install zxing-cpp")
         return False
     
     try:
