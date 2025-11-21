@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, jsonify, flash, redirect, url_for
+from flask import Flask, render_template, request, jsonify, flash, redirect, url_for, send_from_directory
 import os
 from werkzeug.utils import secure_filename
 from PIL import Image
@@ -178,6 +178,16 @@ def decode_qr_from_base64(base64_string):
 def index():
     """Main page with upload form."""
     return render_template('index.html')
+
+@app.route('/robots.txt')
+def robots():
+    """Serve robots.txt."""
+    return send_from_directory(app.static_folder if app.static_folder else '.', 'robots.txt')
+
+@app.route('/sitemap.xml')
+def sitemap():
+    """Serve sitemap.xml."""
+    return send_from_directory(app.static_folder if app.static_folder else '.', 'sitemap.xml')
 
 @app.route('/upload', methods=['POST'])
 def upload_file():

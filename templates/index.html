@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
     <title>QR Code Reader</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -32,6 +32,7 @@
             min-height: 100vh;
             color: var(--brand-text);
             line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
         }
 
         .layout-wrapper {
@@ -178,6 +179,8 @@
             text-decoration: none;
             display: inline-block;
             font-family: 'Work Sans', sans-serif;
+            width: 100%;
+            text-align: center;
         }
 
         .btn:hover {
@@ -240,6 +243,8 @@
             color: var(--brand-primary);
             overflow-x: auto;
             line-height: 1.5;
+            white-space: pre-wrap;
+            word-break: break-all;
         }
 
         @media (max-width: 1024px) {
@@ -248,36 +253,74 @@
             }
 
             .sidebar {
-                padding: 2rem;
+                padding: 3rem 2rem;
                 text-align: center;
                 border-right: none;
                 border-bottom: 3px solid var(--brand-border);
+                min-height: auto;
             }
 
             .sidebar h1 {
                 font-size: 2.5rem;
             }
+            
+            .sidebar .tagline {
+                margin: 0 auto 2rem;
+            }
+            
+            .sidebar .feature-list {
+                display: flex;
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 1.5rem;
+            }
+            
+            .sidebar .feature-list li {
+                margin-bottom: 0;
+                padding-left: 1rem;
+            }
 
             .main-content {
-                padding: 2rem;
+                padding: 3rem 2rem;
+                min-height: auto;
             }
         }
 
         @media (max-width: 600px) {
             .sidebar {
-                padding: 1.5rem;
+                padding: 2rem 1.5rem;
             }
 
             .sidebar h1 {
                 font-size: 2rem;
             }
+            
+            .sidebar .feature-list {
+                flex-direction: column;
+                align-items: center;
+                gap: 0.5rem;
+            }
 
             .main-content {
-                padding: 1.5rem;
+                padding: 2rem 1.5rem;
             }
 
             .upload-area {
                 padding: 2rem 1rem;
+            }
+            
+            .section-title {
+                font-size: 1.75rem;
+            }
+            
+            .api-section {
+                margin-top: 3rem;
+                padding-top: 2rem;
+            }
+            
+            .code-block {
+                padding: 1rem;
+                font-size: 0.75rem;
             }
         }
     </style>
