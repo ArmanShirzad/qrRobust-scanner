@@ -1,12 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>QR Code Decoded - Results</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Source+Serif+Pro:wght@400;600;700&family=Work+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Source+Serif+Pro:wght@400;600;700&family=Work+Sans:wght@300;400;500;600&display=swap"
+        rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -16,15 +19,24 @@
 
         :root {
             /* Earthy editorial palette - WCAG AAA compliant */
-            --brand-primary: #2C3E2D;    /* Deep olive - contrast ratio 12.1:1 on cream */
-            --brand-secondary: #E5D4B5;  /* Warm sand */
-            --brand-background: #FFFDF7; /* Cream */
-            --brand-text: #1A1A1A;       /* Charcoal - contrast ratio 19.2:1 */
-            --brand-accent: #A0522D;     /* Terracotta */
-            --brand-border: #D4C4A8;     /* Muted sand */
-            --brand-hover: #8B4513;      /* Darker terracotta */
-            --brand-muted: #8B7355;      /* Soft brown */
-            --brand-success: #2C5530;    /* Dark green for success */
+            --brand-primary: #2C3E2D;
+            /* Deep olive - contrast ratio 12.1:1 on cream */
+            --brand-secondary: #E5D4B5;
+            /* Warm sand */
+            --brand-background: #FFFDF7;
+            /* Cream */
+            --brand-text: #1A1A1A;
+            /* Charcoal - contrast ratio 19.2:1 */
+            --brand-accent: #A0522D;
+            /* Terracotta */
+            --brand-border: #D4C4A8;
+            /* Muted sand */
+            --brand-hover: #8B4513;
+            /* Darker terracotta */
+            --brand-muted: #8B7355;
+            /* Soft brown */
+            --brand-success: #2C5530;
+            /* Dark green for success */
         }
 
         body {
@@ -248,6 +260,7 @@
         }
     </style>
 </head>
+
 <body>
     <div class="layout-wrapper">
         <aside class="sidebar">
@@ -264,28 +277,94 @@
                 <h2 class="section-title">Decoded Content</h2>
 
                 <div class="results-section">
-                    {% for data in decoded_data %}
-                    <div class="result-item">
+                    {% for item in decoded_data %}
+                    <div class="result-item"
+                        style="display: flex; gap: 2rem; align-items: flex-start; flex-wrap: wrap;">
                         <div class="result-number">{{ loop.index }}</div>
-                        <div class="result-content">
-                            {% if data.startswith('http://') or data.startswith('https://') %}
-                                <div class="result-label">URL</div>
-                                <a href="{{ data }}" target="_blank" class="url-link">{{ data }}</a>
-                            {% elif data.startswith('mailto:') %}
-                                <div class="result-label">Email</div>
-                                <a href="{{ data }}" class="url-link">{{ data }}</a>
-                            {% elif data.startswith('tel:') %}
-                                <div class="result-label">Phone</div>
-                                <a href="{{ data }}" class="url-link">{{ data }}</a>
+
+                        <!-- QR Crop Thumbnail -->
+                        {% if item.crop %}
+                        <div class="qr-thumbnail" style="flex: 0 0 120px;">
+                            <img src="data:image/png;base64,{{ item.crop }}" alt="QR Crop"
+                                style="width: 100%; border: 1px solid var(--brand-border); padding: 4px; background: white;">
+                            <div
+                                style="font-size: 0.75rem; color: var(--brand-muted); text-align: center; margin-top: 0.5rem;">
+                                Confidence: {{ item.confidence }}
+                            </div>
+                        </div>
+                        {% endif %}
+
+                        <div class="result-content-wrapper" style="flex: 1; min-width: 250px;">
+                            {% set data = item.text %}
+
+                            <!-- Content Type Detection & Display -->
+                            {% if data.lower().startswith('http://') or data.lower().startswith('https://') %}
+                            <div class="result-label">URL (Safe Protocol)</div>
+                            <div class="code-display"
+                                style="word-break: break-all; margin-bottom: 1rem; font-family: 'Source Code Pro', monospace;">
+                                {{ data }}</div>
+
+                            <div class="action-buttons"
+                                style="display: flex; flex-wrap: wrap; gap: 1rem; align-items: center;">
+                                <button class="btn copy-btn" onclick="copyToClipboard('{{ data }}')"
+                                    style="margin: 0;">Copy URL</button>
+                                <a href="{{ data }}" target="_blank" class="btn btn-secondary"
+                                    style="padding: 0.5rem 1rem; font-size: 0.875rem; display: inline-flex; align-items: center;">
+                                    Open Link ↗
+                                </a>
+                            </div>
+                            <div class="security-warning"
+                                style="margin-top: 0.5rem; font-size: 0.8rem; color: #B45309; background: #FFFBEB; padding: 0.5rem; border-radius: 4px; display: inline-block;">
+                                ⚠️ Warning: Links can be malicious. Only open if you trust the source.
+                            </div>
+
+                            {% elif data.lower().startswith('javascript:') %}
+                            <div class="result-label" style="color: #991B1B;">⚠️ POTENTIALLY HOSTILE INPUT (JAVASCRIPT)
+                            </div>
+                            <div class="code-display"
+                                style="word-break: break-all; margin-bottom: 1rem; background: #FEF2F2; padding: 1rem; border: 1px solid #FECACA; font-family: 'Source Code Pro', monospace;">
+                                {{ data }}</div>
+                            <div class="action-buttons">
+                                <button class="btn copy-btn" onclick="copyToClipboard('{{ data }}')"
+                                    style="margin: 0; background: #EF4444; border-color: #EF4444;">Copy Text
+                                    (Caution)</button>
+                            </div>
+                            <div class="security-warning"
+                                style="margin-top: 0.5rem; font-size: 0.8rem; color: #991B1B;">
+                                Execution blocked for security.
+                            </div>
+
+                            {% elif data.lower().startswith('mailto:') %}
+                            <div class="result-label">Email Address</div>
+                            <div class="code-display"
+                                style="margin-bottom: 1rem; font-family: 'Source Code Pro', monospace;">{{ data }}</div>
+                            <button class="btn copy-btn" onclick="copyToClipboard('{{ data }}')" style="margin: 0;">Copy
+                                Email</button>
+
+                            {% elif data.lower().startswith('tel:') %}
+                            <div class="result-label">Phone Number</div>
+                            <div class="code-display"
+                                style="margin-bottom: 1rem; font-family: 'Source Code Pro', monospace;">{{ data }}</div>
+                            <button class="btn copy-btn" onclick="copyToClipboard('{{ data }}')" style="margin: 0;">Copy
+                                Number</button>
+
                             {% elif data.startswith('WIFI:') %}
-                                <div class="result-label">WiFi Configuration</div>
-                                {{ data }}
+                            <div class="result-label">WiFi Configuration</div>
+                            <div class="code-display"
+                                style="word-break: break-all; margin-bottom: 1rem; font-family: 'Source Code Pro', monospace;">
+                                {{ data }}</div>
+                            <button class="btn copy-btn" onclick="copyToClipboard('{{ data }}')" style="margin: 0;">Copy
+                                Config</button>
+
                             {% else %}
-                                <div class="result-label">Text</div>
-                                {{ data }}
+                            <div class="result-label">Plain Text</div>
+                            <div class="code-display"
+                                style="white-space: pre-wrap; margin-bottom: 1rem; font-family: 'Source Code Pro', monospace;">
+                                {{ data }}</div>
+                            <button class="btn copy-btn" onclick="copyToClipboard('{{ data }}')" style="margin: 0;">Copy
+                                Text</button>
                             {% endif %}
                         </div>
-                        <button class="btn copy-btn" onclick="copyToClipboard('{{ data }}')">Copy</button>
                     </div>
                     {% endfor %}
                 </div>
@@ -300,7 +379,7 @@
 
     <script>
         function copyToClipboard(text) {
-            navigator.clipboard.writeText(text).then(function() {
+            navigator.clipboard.writeText(text).then(function () {
                 // Show a temporary success message
                 const btn = event.target;
                 const originalText = btn.textContent;
@@ -311,11 +390,12 @@
                     btn.textContent = originalText;
                     btn.style.background = 'var(--brand-success)';
                 }, 2000);
-            }).catch(function(err) {
+            }).catch(function (err) {
                 console.error('Could not copy text: ', err);
                 alert('Failed to copy to clipboard');
             });
         }
     </script>
 </body>
+
 </html>

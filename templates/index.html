@@ -1,12 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
     <title>QR Code Reader</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Source+Serif+Pro:wght@400;600;700&family=Work+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Source+Serif+Pro:wght@400;600;700&family=Work+Sans:wght@300;400;500;600&display=swap"
+        rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -16,14 +19,22 @@
 
         :root {
             /* Earthy editorial palette - WCAG AAA compliant */
-            --brand-primary: #2C3E2D;    /* Deep olive - contrast ratio 12.1:1 on cream */
-            --brand-secondary: #E5D4B5;  /* Warm sand */
-            --brand-background: #FFFDF7; /* Cream */
-            --brand-text: #1A1A1A;       /* Charcoal - contrast ratio 19.2:1 */
-            --brand-accent: #A0522D;     /* Terracotta */
-            --brand-border: #D4C4A8;     /* Muted sand */
-            --brand-hover: #8B4513;      /* Darker terracotta */
-            --brand-muted: #8B7355;      /* Soft brown */
+            --brand-primary: #2C3E2D;
+            /* Deep olive - contrast ratio 12.1:1 on cream */
+            --brand-secondary: #E5D4B5;
+            /* Warm sand */
+            --brand-background: #FFFDF7;
+            /* Cream */
+            --brand-text: #1A1A1A;
+            /* Charcoal - contrast ratio 19.2:1 */
+            --brand-accent: #A0522D;
+            /* Terracotta */
+            --brand-border: #D4C4A8;
+            /* Muted sand */
+            --brand-hover: #8B4513;
+            /* Darker terracotta */
+            --brand-muted: #8B7355;
+            /* Soft brown */
         }
 
         body {
@@ -263,18 +274,18 @@
             .sidebar h1 {
                 font-size: 2.5rem;
             }
-            
+
             .sidebar .tagline {
                 margin: 0 auto 2rem;
             }
-            
+
             .sidebar .feature-list {
                 display: flex;
                 flex-wrap: wrap;
                 justify-content: center;
                 gap: 1.5rem;
             }
-            
+
             .sidebar .feature-list li {
                 margin-bottom: 0;
                 padding-left: 1rem;
@@ -294,7 +305,7 @@
             .sidebar h1 {
                 font-size: 2rem;
             }
-            
+
             .sidebar .feature-list {
                 flex-direction: column;
                 align-items: center;
@@ -308,16 +319,16 @@
             .upload-area {
                 padding: 2rem 1rem;
             }
-            
+
             .section-title {
                 font-size: 1.75rem;
             }
-            
+
             .api-section {
                 margin-top: 3rem;
                 padding-top: 2rem;
             }
-            
+
             .code-block {
                 padding: 1rem;
                 font-size: 0.75rem;
@@ -325,6 +336,7 @@
         }
     </style>
 </head>
+
 <body>
     <div class="layout-wrapper">
         <aside class="sidebar">
@@ -333,20 +345,22 @@
             <ul class="feature-list">
                 <li>Advanced image processing</li>
                 <li>Multiple QR code support</li>
-                <li>API access available</li>
+                <li><a href="#api-docs"
+                        style="color: inherit; text-decoration: underline; text-decoration-color: var(--brand-accent);">API
+                        access available</a></li>
                 <li>Privacy focused</li>
             </ul>
         </aside>
 
         <main class="main-content">
             {% with messages = get_flashed_messages() %}
-                {% if messages %}
-                    <div class="flash-messages">
-                        {% for message in messages %}
-                            <div class="flash-message">{{ message }}</div>
-                        {% endfor %}
-                    </div>
-                {% endif %}
+            {% if messages %}
+            <div class="flash-messages">
+                {% for message in messages %}
+                <div class="flash-message">{{ message }}</div>
+                {% endfor %}
+            </div>
+            {% endif %}
             {% endwith %}
 
             <section class="upload-section">
@@ -361,28 +375,97 @@
                     </div>
 
                     <button type="submit" class="btn">Decode QR Code</button>
+
+                    <div class="privacy-disclosure"
+                        style="margin-top: 1.5rem; padding: 1rem; background: var(--brand-background); border: 1px dashed var(--brand-border); border-radius: 4px; font-size: 0.875rem; color: var(--brand-muted);">
+                        <strong>🔒 Privacy & Security:</strong> Processing happens on our secure server. We do not store
+                        your images or data. Files are permanently deleted immediately after decoding (no storage by
+                        default).
+                    </div>
                 </form>
             </section>
 
-            <section class="api-section">
-                <h2 class="api-title">API Usage</h2>
+            <section class="how-it-works-section" style="margin-bottom: 4rem;">
+                <h2 class="section-title">How It Works</h2>
                 <p class="api-description">
-                    Use this service programmatically by sending a POST request to <code>/decode_base64</code>
-                    with a base64-encoded image.
+                    QR Robust Scanner differentiates itself from generic online tools by using a multi-stage decoding
+                    pipeline.
+                    Unlike client-side only scanners, we leverage server-side processing power to handle difficult
+                    images.
+                </p>
+                <div style="display: flex; gap: 2rem; margin: 2rem 0; flex-wrap: wrap;">
+                    <div style="flex: 1; min-width: 200px;">
+                        <h3
+                            style="color: var(--brand-accent); margin-bottom: 0.5rem; font-family: 'Source Serif Pro', serif;">
+                            1. Upload</h3>
+                        <p style="font-size: 0.9rem;">Image is securely uploaded via SSL.</p>
+                    </div>
+                    <div style="flex: 1; min-width: 200px;">
+                        <h3
+                            style="color: var(--brand-accent); margin-bottom: 0.5rem; font-family: 'Source Serif Pro', serif;">
+                            2. Process</h3>
+                        <p style="font-size: 0.9rem;">Image is normalized (grayscale, robust cropping) using PIL.</p>
+                    </div>
+                    <div style="flex: 1; min-width: 200px;">
+                        <h3
+                            style="color: var(--brand-accent); margin-bottom: 0.5rem; font-family: 'Source Serif Pro', serif;">
+                            3. Decode</h3>
+                        <p style="font-size: 0.9rem;">Parallel decoding using <code>zxing-cpp</code> and
+                            <code>pyzbar</code> libraries.</p>
+                    </div>
+                </div>
+                <p class="api-description">
+                    This project is open source. Check out the backend code on <a
+                        href="https://github.com/ArmanShirzad/qrRobust-scanner" target="_blank"
+                        style="color: var(--brand-accent); text-decoration: underline;">GitHub</a>.
+                </p>
+            </section>
+
+            <section class="api-section" id="api-docs">
+                <h2 class="api-title">API Documentation</h2>
+                <p class="api-description">
+                    Integrate our robust QR detection into your own applications. The API is free to use for
+                    demonstration purposes.
                 </p>
 
-                <div class="code-block">
-POST /decode_base64
-Content-Type: application/json
-
-{
-    "image": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAA..."
-}
+                <div style="margin-bottom: 2rem;">
+                    <h3 style="font-size: 1.1rem; margin-bottom: 0.5rem; font-weight: 600;">Endpoint Specs</h3>
+                    <ul style="list-style: none; padding-left: 0; font-size: 0.95rem; color: var(--brand-text);">
+                        <li style="margin-bottom: 0.5rem;">• <strong>URL:</strong> <code>/decode_base64</code></li>
+                        <li style="margin-bottom: 0.5rem;">• <strong>Method:</strong> POST</li>
+                        <li style="margin-bottom: 0.5rem;">• <strong>Auth:</strong> None required (API Key optional in
+                            future)</li>
+                        <li style="margin-bottom: 0.5rem;">• <strong>Format:</strong> JSON body with base64 encoded
+                            image string</li>
+                        <li style="margin-bottom: 0.5rem;">• <strong>Limits:</strong> Max 16MB per request. Rate limited
+                            to 60 req/min.</li>
+                        <li style="margin-bottom: 0.5rem;">• <strong>Supported Files:</strong> PNG, JPG, JPEG, GIF, BMP,
+                            TIFF</li>
+                    </ul>
                 </div>
 
-                <p class="api-description">
-                    Response will contain the decoded text or an error message.
-                </p>
+                <h3 style="font-size: 1.1rem; margin-bottom: 0.5rem; font-weight: 600;">Example Request</h3>
+                <div class="code-block">
+                    POST /decode_base64
+                    Content-Type: application/json
+
+                    {
+                    "image": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAA..."
+                    }
+                </div>
+
+                <h3 style="font-size: 1.1rem; margin-bottom: 0.5rem; font-weight: 600;">Example Response</h3>
+                <div class="code-block">
+                    {
+                    "decoded_data": [
+                    {
+                    "text": "https://example.com",
+                    "crop": "...",
+                    "confidence": "High"
+                    }
+                    ]
+                    }
+                </div>
             </section>
         </main>
     </div>
@@ -404,7 +487,7 @@ Content-Type: application/json
         uploadArea.addEventListener('drop', (e) => {
             e.preventDefault();
             uploadArea.classList.remove('dragover');
-            
+
             const files = e.dataTransfer.files;
             if (files.length > 0) {
                 fileInput.files = files;
@@ -426,4 +509,5 @@ Content-Type: application/json
         }
     </script>
 </body>
+
 </html>

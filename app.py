@@ -25,6 +25,25 @@ def allowed_file(filename):
     return '.' in filename and \
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
+def context_crop(image, box):
+    """Crop image with context and return as base64."""
+    try:
+        # box is (left, top, right, bottom)
+        crop = image.crop(box)
+        
+        # Resize if too small to be visible
+        if crop.width < 100 or crop.height < 100:
+            scale = max(100/crop.width, 100/crop.height)
+            new_size = (int(crop.width * scale), int(crop.height * scale))
+            crop = crop.resize(new_size, Image.Resampling.LANCZOS)
+            
+        buffered = io.BytesIO()
+        crop.save(buffered, format="PNG")
+        return base64.b64encode(buffered.getvalue()).decode('utf-8')
+    except Exception as e:
+        print(f"Error creating crop: {e}")
+        return None
+
 def decode_with_zxing(image_path):
     """Decode QR code using zxing-cpp library."""
     try:
@@ -35,20 +54,40 @@ def decode_with_zxing(image_path):
         
         # Convert to grayscale if needed
         if image.mode != 'L':
-            image = image.convert('L')
+            gray_image = image.convert('L')
+        else:
+            gray_image = image
         
         # Convert PIL image to numpy array
-        img_array = np.array(image)
+        img_array = np.array(gray_image)
         
         # Try to decode
         results = zxingcpp.read_barcodes(img_array)
         
         if results:
-            decoded_data = []
+            decoded_items = []
             for result in results:
                 if result.format == zxingcpp.BarcodeFormat.QRCode:
-                    decoded_data.append(result.text)
-            return decoded_data if decoded_data else None
+                    # Calculate bounding box from position
+                    # result.position is usually an object with top_left, top_right, etc. or a simplified string
+                    # We'll try to get coordinates regardless of the specific zxing-cpp version structure
+                    try:
+                        pts = [(p.x, p.y) for p in [result.position.top_left, result.position.top_right, result.position.bottom_right, result.position.bottom_left]]
+                        min_x = min(p[0] for p in pts)
+                        max_x = max(p[0] for p in pts)
+                        min_y = min(p[1] for p in pts)
+                        max_y = max(p[1] for p in pts)
+                        box = (min_x, min_y, max_x, max_y)
+                        crop_b64 = context_crop(image, box)
+                    except:
+                        crop_b64 = None
+
+                    decoded_items.append({
+                        'text': result.text,
+                        'crop': crop_b64,
+                        'confidence': 'High (ZXing)'
+                    })
+            return decoded_items if decoded_items else None
         
         return None
         
@@ -68,16 +107,27 @@ def decode_with_pyzbar(image_path):
         
         # Convert to grayscale if needed
         if image.mode != 'L':
-            image = image.convert('L')
+            gray_image = image.convert('L')
+        else:
+            gray_image = image
         
         # Try to decode
-        qr_codes = pyzbar.decode(image)
+        qr_codes = pyzbar.decode(gray_image)
         
         if qr_codes:
-            decoded_data = []
+            decoded_items = []
             for qr_code in qr_codes:
-                decoded_data.append(qr_code.data.decode('utf-8'))
-            return decoded_data
+                # pyzbar returns rect
+                rect = qr_code.rect
+                box = (rect.left, rect.top, rect.left + rect.width, rect.top + rect.height)
+                crop_b64 = context_crop(image, box)
+                
+                decoded_items.append({
+                    'text': qr_code.data.decode('utf-8'),
+                    'crop': crop_b64,
+                    'confidence': 'High (PyZbar)'
+                })
+            return decoded_items
         
         return None
         
@@ -118,29 +168,44 @@ def decode_qr_from_base64(base64_string):
         # Convert to PIL Image
         image = Image.open(io.BytesIO(image_data))
         
+        # Save temp file to reuse existing valid logic or refactor
+        # Ideally we should refactor decode functions to take image object, but file path is required to match current signatures
+        # For memory efficiency, let's adapt the inner logic instead of saving files
+        
         # First try zxing-cpp
         try:
             import zxingcpp
             
-            # Convert to grayscale if needed
             if image.mode != 'L':
                 image_gray = image.convert('L')
             else:
                 image_gray = image
             
-            # Convert PIL image to numpy array
             img_array = np.array(image_gray)
-            
-            # Try to decode
             results = zxingcpp.read_barcodes(img_array)
             
             if results:
-                decoded_data = []
+                decoded_items = []
                 for result in results:
                     if result.format == zxingcpp.BarcodeFormat.QRCode:
-                        decoded_data.append(result.text)
-                if decoded_data:
-                    return decoded_data, None
+                        try:
+                            pts = [(p.x, p.y) for p in [result.position.top_left, result.position.top_right, result.position.bottom_right, result.position.bottom_left]]
+                            min_x = min(p[0] for p in pts)
+                            max_x = max(p[0] for p in pts)
+                            min_y = min(p[1] for p in pts)
+                            max_y = max(p[1] for p in pts)
+                            box = (min_x, min_y, max_x, max_y)
+                            crop_b64 = context_crop(image, box)
+                        except:
+                            crop_b64 = None
+                            
+                        decoded_items.append({
+                            'text': result.text,
+                            'crop': crop_b64,
+                            'confidence': 'High (ZXing)'
+                        })
+                if decoded_items:
+                    return decoded_items, None
         except ImportError:
             pass
         except Exception as e:
@@ -150,20 +215,26 @@ def decode_qr_from_base64(base64_string):
         try:
             from pyzbar import pyzbar
             
-            # Convert to grayscale if needed
             if image.mode != 'L':
                 image_gray = image.convert('L')
             else:
                 image_gray = image
             
-            # Try to decode
             qr_codes = pyzbar.decode(image_gray)
             
             if qr_codes:
-                decoded_data = []
+                decoded_items = []
                 for qr_code in qr_codes:
-                    decoded_data.append(qr_code.data.decode('utf-8'))
-                return decoded_data, None
+                    rect = qr_code.rect
+                    box = (rect.left, rect.top, rect.left + rect.width, rect.top + rect.height)
+                    crop_b64 = context_crop(image, box)
+                    
+                    decoded_items.append({
+                        'text': qr_code.data.decode('utf-8'),
+                        'crop': crop_b64,
+                        'confidence': 'High (PyZbar)'
+                    })
+                return decoded_items, None
         except ImportError:
             pass
         except Exception as e:
