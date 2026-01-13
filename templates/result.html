@@ -3,8 +3,12 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>QR Code Decoded - Results</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+    <meta name="description"
+        content="Decoded QR code results. Robust, secure online scanner. Created by Arman Shirzad.">
+    <link rel="canonical" href="http://qrscanner.armanshirzad.com/">
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='favicon.png') }}">
+    <title>QR Code Decoded - Results | Arman Shirzad</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
@@ -49,7 +53,7 @@
 
         .layout-wrapper {
             display: grid;
-            grid-template-columns: 1fr 2fr;
+            grid-template-columns: 350px 1fr;
             min-height: 100vh;
         }
 
@@ -58,8 +62,11 @@
             padding: 4rem 3rem;
             display: flex;
             flex-direction: column;
-            justify-content: center;
             border-right: 3px solid var(--brand-border);
+            height: 100vh;
+            position: sticky;
+            top: 0;
+            overflow-y: auto;
         }
 
         .sidebar h1 {
@@ -91,11 +98,30 @@
             color: var(--brand-accent);
         }
 
+        .sidebar .creator-link {
+            margin-top: auto;
+            padding-top: 2rem;
+            font-size: 0.9rem;
+            color: var(--brand-primary);
+            border-top: 1px solid rgba(44, 62, 45, 0.1);
+        }
+
+        .sidebar .creator-link a {
+            color: var(--brand-accent);
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .sidebar .creator-link a:hover {
+            text-decoration: underline;
+        }
+
         .main-content {
             padding: 4rem 6rem;
             display: flex;
             flex-direction: column;
             justify-content: center;
+            min-height: 100vh;
         }
 
         .section-title {
@@ -226,6 +252,17 @@
                 text-align: center;
                 border-right: none;
                 border-bottom: 3px solid var(--brand-border);
+                height: auto;
+                position: static;
+                overflow-y: visible;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .sidebar .creator-link {
+                margin-top: 2rem;
+                border-top: none;
             }
 
             .sidebar h1 {
@@ -234,6 +271,7 @@
 
             .main-content {
                 padding: 2rem;
+                min-height: auto;
             }
         }
 
@@ -269,6 +307,9 @@
             <div class="file-info">
                 <strong>File:</strong><br>
                 {{ filename }}
+            </div>
+            <div class="creator-link">
+                Created by <a href="https://armanshirzad.com" target="_blank">Arman Shirzad</a>
             </div>
         </aside>
 
