@@ -260,6 +260,12 @@ def sitemap():
     """Serve sitemap.xml."""
     return send_from_directory(app.static_folder if app.static_folder else '.', 'sitemap.xml')
 
+@app.route('/favicon.ico')
+def favicon():
+    """Serve favicon.ico."""
+    return send_from_directory(app.static_folder if app.static_folder else 'static',
+                             'favicon.png', mimetype='image/vnd.microsoft.icon')
+
 @app.route('/upload', methods=['POST'])
 def upload_file():
     """Handle file upload and QR code decoding."""
